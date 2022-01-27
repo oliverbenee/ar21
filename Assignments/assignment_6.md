@@ -1,4 +1,4 @@
-# Assignment 5 - ?? (graded)
+# Assignment 6 - Evaluation (graded)
 
 **Date**: [TODO: date]
 
