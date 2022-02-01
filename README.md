@@ -1,9 +1,9 @@
 # Augmented Reality - 2022
 
 ## Group
-* Name 1
-* Name 2
-* Name 3
+* Oliver Medoc Benée Petersen
+* Thorben Christopher Schmidt
+* 404 Member not found
 
 <!-- [TODO: cool image of group members - only if you like] -->
 
