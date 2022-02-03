@@ -2,9 +2,11 @@
 
 **Date**: [TODO: date]
 
-**Group members participating**: [TODO: insert names]
+**Group members participating**: Oliver Benée Petersen
 
 **Activity duration**: [TODO: Insert hours spend]
+- 4 Hrs Tuesday to reach task 3.4
+- 1 Hrs Wednesday to complete task 3.4
 
 ## Goal
 [TODO: goal of this weeks exercises]
@@ -16,7 +18,7 @@
 [TODO: results for this weeks exercises]
 
 ## Conclusion
-[TODO: conclusions of this weeks exercises]
+C# fucking sucks
 
 ## References
 [TODO: used references]
