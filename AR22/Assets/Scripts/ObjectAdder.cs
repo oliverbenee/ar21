@@ -24,7 +24,6 @@ public class ObjectAdder : MonoBehaviour
         thing = Instantiate(prefab, parent);
         // Import script MoveAround
         thing.AddComponent(typeof(MoveAround));
-
     }
 
     // Update is called once per frame
