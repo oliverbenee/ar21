@@ -2,7 +2,7 @@
 
 **Date**: Feb. 4th, 2022
 
-**Group members participating**: Oliver Benée Petersen
+**Group members participating**: Oliver Benée Petersen, Thorben Christopher Schmidt
 
 **Activity duration**: [TODO: Insert hours spend]
 - 4 Hrs Tuesday to reach task 3.4
