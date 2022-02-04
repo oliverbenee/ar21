@@ -408,6 +408,7 @@ MonoBehaviour:
   floor: {fileID: 6400660894036296476, guid: a41941c39ca337c42b02a676ba10eaf1, type: 3}
   flyingboi: {fileID: 1110593734443427346, guid: c66f5f5befaa3e54ab6f02e3e1caa923, type: 3}
   person_man: {fileID: 699285135413978456, guid: 534735d3bdafa9943aa087317df34b39, type: 3}
+  gameobjects: {fileID: 838563293}
 --- !u!4 &857186715
 Transform:
   m_ObjectHideFlags: 0
