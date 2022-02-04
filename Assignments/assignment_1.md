@@ -4,7 +4,7 @@
 
 **Group members participating**: Oliver Benée Petersen, Thorben Christopher Schmidt
 
-**Activity duration**: [TODO: Insert hours spend]
+**Activity duration**: 10 hrs
 - 4 Hrs Tuesday to reach task 3.4
 - 1 Hrs Wednesday to complete task 3.4
 - 2 Hrs Friday to complete task 3 & 4
@@ -39,7 +39,7 @@ By default, the text will only face in the same direction, that of the angle 0 d
 
 > 3.6.2: Add a script to the text, such that it always faces the main camera of the scene. Hint: LookAt. Explain how the text now looks. If the text is facing towards the camera, but in the wrong direction, how can you fix that?
 
-Text is facing away from the camera at all times. We fixed this by rotating it 180 degrees around the z axis
+Initially, the text was facing directly away from the camera at all times. It could be seen as "mirrored". We fixed this by rotating the text 180 degrees around the z axis. 
 
 ## Goal
 Complete Exercise 1-4
@@ -56,7 +56,4 @@ In this project, the students are asked to design and add various electronics to
 To inspire students in their brainstorming process, we propose _BikeStorm_ as a tool, where users can visualize various electronic attachments on their bicycle, with the idea of letting users see what these attachments would look like on the bike itself. 
 
 ## Conclusion
-C# f*cking sucks
-
-## References
-404. References not found
+We have created an application in Unity that allows us to place various basic objects and move them using the WASD keys. These objects can have various shapes, textures, and attributes, such as colors and text above. 
