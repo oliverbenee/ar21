@@ -7,7 +7,7 @@ public class ObjectAdder : MonoBehaviour
     [SerializeField]
     private Vector3 position = new Vector3(0.7f, 2f, 0f); // Location of the object
     [SerializeField]
-    private GameObject prefab, floor, flyingboi, person_man; //NOTE: IN THE UNITY EDITOR THE VALUE OF THIS FIELD CAN BE SPECIFIED BY RIGHT-CLICKING THE SCRIPT
+    private GameObject prefab, floor, flyingboi, person_man, gameobjects; //NOTE: IN THE UNITY EDITOR THE VALUE OF THIS FIELD CAN BE SPECIFIED BY RIGHT-CLICKING THE SCRIPT
 
     // Start is called before the first frame update
     void Start()
@@ -24,6 +24,8 @@ public class ObjectAdder : MonoBehaviour
         thing = Instantiate(prefab, parent);
         // Import script MoveAround
         thing.AddComponent(typeof(MoveAround));
+        // Set GameObject gameobjects as parent. 
+        thing.transform.SetParent(gameobjects.GetComponent<Transform>());
     }
 
     // Update is called once per frame
@@ -33,6 +35,7 @@ public class ObjectAdder : MonoBehaviour
 
         /*
          * Place cylinder object by pressing Mouse1 or CTRL.
+         * Set GameObject gameobjects as parent. 
          */
         if(Input.GetButtonDown("Fire1")){
             // Source: https://www.youtube.com/watch?v=RGjojuhuk_s
@@ -44,16 +47,19 @@ public class ObjectAdder : MonoBehaviour
                 worldClickPosition = hit.point;
                 // Click position is set. Place prefab.
                 Debug.Log("Place at: " + worldClickPosition);
-                Instantiate(floor, worldClickPosition, Quaternion.identity);
+                GameObject cylinder = Instantiate(floor, worldClickPosition, Quaternion.identity);
+                cylinder.transform.SetParent(gameobjects.GetComponent<Transform>());
             }
 
         /*  
-         * If you press Left Alt, place the ball. 
+         * If you press Left Alt, place the pill. 
+         * Set GameObject gameobjects as parent. 
          */
         } else if (Input.GetKeyDown("left alt")){
             Vector3 location = new Vector3(3.64f, 1.98f, -1.82f);
             Debug.Log("key ALT pressed. Place thing in the middle of the air.");
-            Instantiate(flyingboi, location, Quaternion.identity);
+            GameObject pill = Instantiate(flyingboi, location, Quaternion.identity);
+            pill.transform.SetParent(gameobjects.GetComponent<Transform>());
         }
     }
 }
