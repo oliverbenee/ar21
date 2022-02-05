@@ -55,7 +55,7 @@ With _BikeStorm_, we want to inspire first-semester IT Product Design students f
 In this project, the students are asked to design and add various electronics to their bicycle in order to improve it with respect to traffic, its visual appeal, the riding experience, or its other qualities. 
 To inspire students in their brainstorming process, we propose _BikeStorm_ as a tool, where users can visualize various electronic attachments on their bicycle, with the idea of letting users see what these attachments would look like on the bike itself. 
 
-![Sketch of the intended functionality](https://gitlab.au.dk/-/ide/project/au598997/ar21/tree/assignment_1/-/20220205_115600.jpg/ "sketch")
+![Sketch of the intended functionality](https://gitlab.au.dk/au598997/ar21/-/raw/08c0311087119e215a81adf6d6e525b1328c8a08/20220205_115600.jpg)
 
 ## Conclusion
 We have created an application in Unity that allows us to place various basic objects and move them using the WASD keys. These objects can have various shapes, textures, and attributes, such as colors and text above. 
