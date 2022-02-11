@@ -5,9 +5,13 @@
 **Group members participating**: Oliver Benée Petersen, Thorben Christopher Schmidt
 
 **Activity duration**: [TODO: Insert hours spend]
+
 08.02.22: 6 Hours Excercise 1
+
 09.02.22: 3 Hours set up raycast with default AR planes
+
 10.02.22: 5 hours stuck on not working raycast
+
 11.02.22:
 
 
