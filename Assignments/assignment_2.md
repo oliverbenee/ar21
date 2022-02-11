@@ -51,6 +51,8 @@ If we delete the line renderer's materials or try to disable it, the black lines
 
 > 2.5.3: Explain and demonstrate the objects you have created.
 
+We have decided to use a simple bike model. It is a bike
+
 [Insert screenshot here]
 
 > 3.1.4:what happens when you move the physical image. 
