@@ -12,7 +12,7 @@
 
 10.02.22: 5 hours stuck on not working raycast
 
-11.02.22:
+11.02.22: 6½ hours getting raycast etc to work
 
 
 # Responses to "Explain" exercises. 
