@@ -8,7 +8,7 @@ public class textMeshScript : MonoBehaviour
     void Update()
     {
         Debug.Log("Camera Script running");
-        Vector3 cameraPosition = Camera.current.transform.position;
+        Vector3 cameraPosition = Camera.main.transform.position;
         transform.LookAt(cameraPosition);
         transform.Rotate(0, 180, 0);
     }

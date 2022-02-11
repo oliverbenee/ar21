@@ -24,14 +24,10 @@ public class RealObjectAdder : MonoBehaviour
     {
         if(useCursor){UpdateCursor();}
         if(Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began){
-            GameObject.Instantiate(ObjectToPlace, transform.position, transform.rotation);
-        } else {
-            List<ARRaycastHit> hits = new List<ARRaycastHit>();
-            raycastManager.Raycast(Input.GetTouch(0).position, hits, UnityEngine.XR.ARSubsystems.TrackableType.Planes);
-            if(hits.Count > 0){
-                GameObject.Instantiate(ObjectToPlace, hits[0].pose.position, hits[0].pose.rotation);
-            } 
-        }
+            Vector3 position = transform.position; 
+            Vector3 position2 = new Vector3(position.x, position.y, position.z+0.1f);
+            GameObject.Instantiate(ObjectToPlace, position2, transform.rotation);
+        } 
     }
 
     void UpdateCursor(){
@@ -41,6 +37,9 @@ public class RealObjectAdder : MonoBehaviour
         if(hits.Count > 0){
             transform.position = hits[0].pose.position;
             transform.rotation = hits[0].pose.rotation;
-        }
+            cursorChildObject.SetActive(true);
+         } else {
+             cursorChildObject.SetActive(false);
+         }
     }
 }
