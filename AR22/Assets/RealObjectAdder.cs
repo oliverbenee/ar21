@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
+using UnityEngine.UI;
 
 public class RealObjectAdder : MonoBehaviour
 {
@@ -13,21 +14,29 @@ public class RealObjectAdder : MonoBehaviour
     private ARRaycastManager raycastManager;
     [SerializeField]
     private bool useCursor = true;
+    [SerializeField]
+    private Button placeObjectButton;
     // Start is called before the first frame update
     void Start()
     {
         cursorChildObject.SetActive(useCursor);
+        // Place object button
+        placeObjectButton.onClick.AddListener(placeObject);
     }
 
     // Update is called once per frame
     void Update()
     {
         if(useCursor){UpdateCursor();}
-        if(Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began){
-            Vector3 position = transform.position; 
-            Vector3 position2 = new Vector3(position.x, position.y, position.z+0.1f);
-            GameObject.Instantiate(ObjectToPlace, position2, transform.rotation);
-        } 
+        // if(Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began){
+        //     placeObject();    
+        // } 
+    }
+
+    void placeObject(){
+        Vector3 position = transform.position; 
+        Vector3 position2 = new Vector3(position.x, position.y, position.z);
+        GameObject.Instantiate(ObjectToPlace, position2, transform.rotation);
     }
 
     void UpdateCursor(){
