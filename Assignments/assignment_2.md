@@ -44,7 +44,10 @@ When will you use each function?
 Can you combine them in a meaningful way?
 If you want to use gravity in your project, how can you change the design of the debug planes to look nicer?
 
-Unity's Raycast can be used for defaultARPlanes, which allow physics use, AR foundations on the other hand work without AR default planes, and can thus be used for anything where an object doesn't require  physical interaction with anything. In our case, we can use the AR foundation raycast, to spawn the object at a specific spot with our indication marker, and then have the object collide with the debug planes, which are invisble as we disabled the mesh renderer
+Unity's Raycast can be used for defaultARPlanes, which allow physics use, AR foundations on the other hand work without AR default planes, and can thus be used for anything where an object doesn't require  physical interaction with anything. In our case, we can use the AR foundation raycast, to spawn the object at a specific spot with our indication marker, and then have the object collide with the debug planes, which are invisble as we removed the material from the mesh renderer and removed the line renderer. 
+
+If we delete the mesh renderer entirely and not just its material, collision stops working. So we have to disable it. 
+If we delete the line renderer's materials or try to disable it, the black lines from the planes are still visible. We are not sure why. But collision still works if we remove the Line Renderer entirely. 
 
 > 2.5.3: Explain and demonstrate the objects you have created.
 
