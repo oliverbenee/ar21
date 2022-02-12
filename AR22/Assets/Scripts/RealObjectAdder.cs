@@ -33,12 +33,14 @@ public class RealObjectAdder : MonoBehaviour
         // } 
     }
 
+    // When requested by a button press, create a new object. 
     void placeObject(){
         Vector3 position = transform.position; 
         Vector3 position2 = new Vector3(position.x, position.y, position.z);
         GameObject.Instantiate(ObjectToPlace, position2, transform.rotation);
     }
 
+    // Update location of pink cursor
     void UpdateCursor(){
         Vector2 screenPosition = Camera.main.ViewportToScreenPoint(new Vector2(0.5f, 0.5f));
         List<ARRaycastHit> hits = new List<ARRaycastHit>();
