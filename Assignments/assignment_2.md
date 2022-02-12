@@ -21,11 +21,14 @@
 
 Light yellow Areas with black borders, visualizing the found AR planes overlaid onto the real world.
 
-[Insert screenshot here]
+![ALT](https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/Screenshot_20220209-114831_My_project.jpg)
+
 
 > 2.1.2: what is the size of your object in the physical world? How does unity's units relate to real world units?
 
 20 units or 15cm when compared by spawning it next to a real world object. This would mean 1 unit is roughly 0.75cm
+
+![ALT](https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/Screenshot_20220211-163419_AR22.jpg)
 
 > 2.1.3: what happens if you insert a cube on top of a cube?
 
@@ -53,7 +56,7 @@ If we delete the line renderer's materials or try to disable it, the black lines
 
 We have decided to use a simple bike model. It is a bike
 
-[Insert screenshot here]
+![ALT](https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/Screenshot_20220211-181639_AR22.jpg)
 
 > 3.1.4:what happens when you move the physical image. 
 
