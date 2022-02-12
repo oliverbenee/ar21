@@ -14,6 +14,7 @@
 
 11.02.22: 6½ hours getting raycast etc to work
 
+12.0.22: 4½ Hours getting Image tracking to work
 
 # Responses to "Explain" exercises. 
 
@@ -58,7 +59,11 @@ We have decided to use a simple bike model. It is a bike
 
 ![ALT](https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/Screenshot_20220211-181639_AR22.jpg)
 
-> 3.1.4:what happens when you move the physical image. 
+> 3.1.4: what happens when you move the physical image. 
+
+The Cube moves with the image, as visible in the image with the white cube. The image with the orange cube shows what happens when scaling is forgotten.
+
+![ALT](https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/Screenshot_20220212-160418_AR22.jpg)![ALT](https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/Screenshot_20220212-160139_AR22.jpg)
 
 > 3.2.1: how does the two MO's look compared to each other? Why do they look this way?
 
