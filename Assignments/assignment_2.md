@@ -67,23 +67,17 @@ The Cube moves with the image, as visible in the image with the white cube. The 
 
 > 3.2.1: how does the two MO's look compared to each other? Why do they look this way?
 
-> 3.3.3: does this give you additional possibilities to adding objects to your world? How? Where? Why?
-
-
-
+We did not get this to work. The application would only track one real world image at a time. From our understanding the second image would spawn a cube half as big, as the first one, if both RL images are the same size.
 
 
 ## Goal
-[TODO: goal of this weeks exercises]
+The goal of this week's exercises are to first recognizes planes in AR and then spawn objects on them. After that, we then track an image, to spawn an object on this image.
 
 ## Plan
-[TODO: plan of this weeks exercises]
+Not getting stuck for hours on tiny errors
 
 ## Results
-[TODO: results for this weeks exercises]
+We got stuck for hours on tiny errors. We did get plane tracking and instantiating objects on these working, as shown in the picture with the bike model. The same with the screenshots of the objects spawned on the tracked images.
 
 ## Conclusion
-[TODO: conclusions of this weeks exercises]
-
-## References
-[TODO: used references]
+As opposed to plane tracking, Image tracking is useful, as it allows for direct real world control of the virtual object, e.g. moving, turning, or even removing it from the room.
