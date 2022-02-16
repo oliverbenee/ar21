@@ -16,6 +16,10 @@ public class RealObjectAdder : MonoBehaviour
     private bool useCursor = true;
     [SerializeField]
     private Button placeObjectButton;
+
+    //List of gameobjects used for delete function.
+    private List<GameObject> objects;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,7 +41,16 @@ public class RealObjectAdder : MonoBehaviour
     void placeObject(){
         Vector3 position = transform.position; 
         Vector3 position2 = new Vector3(position.x, position.y, position.z);
-        GameObject.Instantiate(ObjectToPlace, position2, transform.rotation);
+        var go = GameObject.Instantiate(ObjectToPlace, position2, transform.rotation);
+        objects.Add(go);
+    }
+
+    void deleteObjects(){
+        // Iterate through list and delete those objects.
+        foreach (GameObject go in objects)
+        {
+            Destroy(go);
+        }
     }
 
     // Update location of pink cursor
