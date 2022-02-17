@@ -6,6 +6,7 @@ TagManager:
   tags:
   - inputMethod
   - placeObjectButton
+  - bike
   layers:
   - Default
   - TransparentFX

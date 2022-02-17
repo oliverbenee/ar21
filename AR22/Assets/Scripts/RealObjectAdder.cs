@@ -24,6 +24,8 @@ public class RealObjectAdder : MonoBehaviour
     //List of gameobjects used for delete function.
     private List<GameObject> objects = new List<GameObject>();
 
+    //GameObject selected for editing.
+    private GameObject editableObject;
     // Start is called before the first frame update
     void Start()
     {
@@ -38,12 +40,44 @@ public class RealObjectAdder : MonoBehaviour
     void Update()
     {
         if(useCursor){UpdateCursor();}
-        // if(Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began){
-        //     placeObject();    
-        // } 
+        // Checks if a placed gameobject is pressed.
+        if(Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began){
+            // register when an object is pressed.
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if(Physics.Raycast(ray, out hit)) { 
+                // This out-commented code was meant to compare the object found, but it is unnecessarily complex.
+                var worldClickPosition = hit.point;
+                // Debug.Log("HIT: " + worldClickPosition);
+                // // Now check if we hit an actual object. 
+                // if (hit.collider.gameObject.name == "BMXBikeE"){
+                //     Debug.Log("Hit a bike!");
+                //     // Hardcoded enablePlace. TODO: FIX. 
+                //     setPlace(false);
+                // } else {
+                //     GameObject go = hit.collider.gameObject;
+                //     Debug.Log("LMAO you hit: '" + go.name + "' It is child to: '" + go.transform.parent.gameObject.name + "'");
+                // }
+                // So this is how you get the object:
+                editableObject = hit.collider.gameObject.transform.parent.gameObject;
+                Debug.Log("Selected object: " + editableObject.name);
+            }
+        } 
     }
 
-    // Enable placing objects
+    // Sets visibility of cursor and confirmbutton. Sets useCursor.
+    void setPlace(bool state){
+        cursorChildObject.gameObject.SetActive(state);
+        confirmButton.gameObject.SetActive(state);
+        useCursor = state;
+    }
+
+    // Sets visibility of delete button. 
+    void setDelete(bool state){
+        Destroy(editableObject);
+    }
+
+    // Toggles visibility of the cursor and confirm button. Toggles useCursor.
     void enablePlace(){
         Debug.Log("NEW STATE: " + !useCursor);
         cursorChildObject.gameObject.SetActive(!useCursor);

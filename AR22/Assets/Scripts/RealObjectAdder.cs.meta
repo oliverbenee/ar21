@@ -7,6 +7,10 @@ MonoImporter:
   - cursorChildObject: {instanceID: 0}
   - ObjectToPlace: {fileID: 6400660894036296476, guid: a41941c39ca337c42b02a676ba10eaf1, type: 3}
   - raycastManager: {instanceID: 0}
+  - clearAllButton: {instanceID: 0}
+  - enablePlaceButton: {instanceID: 0}
+  - confirmButton: {instanceID: 0}
+  - outlineshader: {fileID: 4800000, guid: 056810074bf8f354488873a5f473fc54, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
