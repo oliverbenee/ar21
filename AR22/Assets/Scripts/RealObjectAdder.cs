@@ -48,6 +48,7 @@ public class RealObjectAdder : MonoBehaviour
             if(Physics.Raycast(ray, out hit)) { 
                 // This out-commented code was meant to compare the object found, but it is unnecessarily complex.
                 var worldClickPosition = hit.point;
+
                 // Debug.Log("HIT: " + worldClickPosition);
                 // // Now check if we hit an actual object. 
                 // if (hit.collider.gameObject.name == "BMXBikeE"){
@@ -58,9 +59,11 @@ public class RealObjectAdder : MonoBehaviour
                 //     GameObject go = hit.collider.gameObject;
                 //     Debug.Log("LMAO you hit: '" + go.name + "' It is child to: '" + go.transform.parent.gameObject.name + "'");
                 // }
+
                 // So this is how you get the object:
                 editableObject = hit.collider.gameObject.transform.parent.gameObject;
                 Debug.Log("Selected object: " + editableObject.name);
+                editableObject.GetComponent<Outline>().enabled = true;
             }
         } 
     }
@@ -93,6 +96,13 @@ public class RealObjectAdder : MonoBehaviour
         Vector3 position2 = new Vector3(position.x, position.y, position.z);
         GameObject go = Instantiate(ObjectToPlace, position2, transform.rotation);
         objects.Add(go);
+
+        // Add a hidden outline to the object.
+        var outline = go.AddComponent<Outline>();
+        outline.OutlineMode = Outline.Mode.OutlineAll;
+        outline.OutlineColor = Color.yellow;
+        outline.OutlineWidth = 5f;
+        outline.enabled = false;
     }
 
     // When requested by a button press, destroy all objects.
