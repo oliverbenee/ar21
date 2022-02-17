@@ -13,11 +13,13 @@ public class RealObjectAdder : MonoBehaviour
     [SerializeField]
     private ARRaycastManager raycastManager;
     [SerializeField]
-    private bool useCursor = true;
-    [SerializeField]
-    private Button placeObjectButton;
+    private bool useCursor = false;
     [SerializeField]
     private Button clearAllButton;
+    [SerializeField]
+    private Button enablePlaceButton;
+    [SerializeField]
+    private Button confirmButton;
 
     //List of gameobjects used for delete function.
     private List<GameObject> objects = new List<GameObject>();
@@ -27,7 +29,8 @@ public class RealObjectAdder : MonoBehaviour
     {
         cursorChildObject.SetActive(useCursor);
         // Place object button
-        placeObjectButton.onClick.AddListener(placeObject);
+        enablePlaceButton.onClick.AddListener(enablePlace);
+        confirmButton.onClick.AddListener(placeObject);
         clearAllButton.onClick.AddListener(deleteObjects);
     }
 
@@ -38,6 +41,15 @@ public class RealObjectAdder : MonoBehaviour
         // if(Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began){
         //     placeObject();    
         // } 
+    }
+
+    // Enable placing objects
+    void enablePlace(){
+        Debug.Log("NEW STATE: " + !useCursor);
+        cursorChildObject.gameObject.SetActive(!useCursor);
+        // change state of place object button;
+        confirmButton.gameObject.SetActive(!useCursor);
+        useCursor = !useCursor;
     }
 
     // When requested by a button press, create a new object. 
