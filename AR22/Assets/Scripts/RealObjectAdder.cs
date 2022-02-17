@@ -16,9 +16,11 @@ public class RealObjectAdder : MonoBehaviour
     private bool useCursor = true;
     [SerializeField]
     private Button placeObjectButton;
+    [SerializeField]
+    private Button clearAllButton;
 
     //List of gameobjects used for delete function.
-    private List<GameObject> objects;
+    private List<GameObject> objects = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +28,7 @@ public class RealObjectAdder : MonoBehaviour
         cursorChildObject.SetActive(useCursor);
         // Place object button
         placeObjectButton.onClick.AddListener(placeObject);
+        clearAllButton.onClick.AddListener(deleteObjects);
     }
 
     // Update is called once per frame
@@ -39,25 +42,31 @@ public class RealObjectAdder : MonoBehaviour
 
     // When requested by a button press, create a new object. 
     void placeObject(){
+        Debug.Log("call placeobject");
         Vector3 position = transform.position; 
         Vector3 position2 = new Vector3(position.x, position.y, position.z);
-        var go = GameObject.Instantiate(ObjectToPlace, position2, transform.rotation);
+        GameObject go = Instantiate(ObjectToPlace, position2, transform.rotation);
         objects.Add(go);
     }
 
+    // When requested by a button press, destroy all objects.
     void deleteObjects(){
-        // Iterate through list and delete those objects.
-        foreach (GameObject go in objects)
-        {
-            Destroy(go);
+        Debug.Log("call deleteobjects");
+        // Iterate through list and hide those objects.
+        foreach(GameObject u in objects) {
+            //For some reason, we CANNOT destory the object. Because that would make sense right?
+            u.SetActive(false);
         }
+        objects.Clear();
     }
 
     // Update location of pink cursor
     void UpdateCursor(){
-        Vector2 screenPosition = Camera.main.ViewportToScreenPoint(new Vector2(0.5f, 0.5f));
+        Debug.Log("call updatecursor");
+        Vector2 screenPosition = Camera.current.ViewportToScreenPoint(new Vector2(0.5f, 0.5f));
         List<ARRaycastHit> hits = new List<ARRaycastHit>();
         raycastManager.Raycast(screenPosition, hits, UnityEngine.XR.ARSubsystems.TrackableType.Planes);
+        foreach (ARRaycastHit hit in hits){Debug.Log("HIT: " + hit);}
         if(hits.Count > 0){
             transform.position = hits[0].pose.position;
             transform.rotation = hits[0].pose.rotation;
