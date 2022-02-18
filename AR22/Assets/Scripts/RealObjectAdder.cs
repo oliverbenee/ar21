@@ -41,7 +41,9 @@ public class RealObjectAdder : MonoBehaviour
             // register when an object is pressed.
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            // set editableObject as current object and highlight only that one.
+            /*
+             * set editableObject as current object and highlight only that one.
+             */
             if(Physics.Raycast(ray, out hit)) { 
                 var worldClickPosition = hit.point;
                 // So this is how you get the object:
@@ -52,13 +54,17 @@ public class RealObjectAdder : MonoBehaviour
                 bool isSameObject = hitObject == editableObject;
                 if(isSameObject){
                     Debug.Log("Selected the same object.");
-                    // editableObject.GetComponent<Outline>().enabled = false;
+                    editableObject.GetComponent<Outline>().enabled = false;
                 } else { // Not the same object. editableObject != hitObject.
                     Debug.Log("New object selected");
                     if(hitObject.name == "BMXBikeE(Clone)"){ // Hit a bike.
                         Debug.Log("Hit a bike!");
+                        editableObject.GetComponent<Outline>().enabled = false;
+                        editableObject = hitObject;
+                        hitObject.GetComponent<Outline>().enabled = true;
                     } else { // Did not hit a bike.
                         Debug.Log("Hit a " + hitObject.name + " instead");
+                        editableObject.GetComponent<Outline>().enabled = false;
                     }
                     // editableObject.GetComponent<Outline>().enabled = false;
                     // editableObject = hitObject;
