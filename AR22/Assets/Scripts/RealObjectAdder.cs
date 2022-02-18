@@ -52,23 +52,29 @@ public class RealObjectAdder : MonoBehaviour
                 // Confirm if it is not a re-selection.
                 Debug.Log("OLD OBJECT: " + editableObject);
                 bool isSameObject = hitObject == editableObject;
+                // STATUS: 
                 if(isSameObject){
                     Debug.Log("Selected the same object.");
                     editableObject.GetComponent<Outline>().enabled = false;
+                    hitObject.GetComponent<Outline>().enabled = false;
+                    editableObject = new GameObject();
+                    editableObject.AddComponent<Outline>(); // This prevents am error when not hitting a bike, and no bike is being edited.
                 } else { // Not the same object. editableObject != hitObject.
+                    // STATUS: 
                     Debug.Log("New object selected");
                     if(hitObject.name == "BMXBikeE(Clone)"){ // Hit a bike.
                         Debug.Log("Hit a bike!");
                         editableObject.GetComponent<Outline>().enabled = false;
                         editableObject = hitObject;
                         hitObject.GetComponent<Outline>().enabled = true;
+                    // STATUS: 
                     } else { // Did not hit a bike.
                         Debug.Log("Hit a " + hitObject.name + " instead");
                         editableObject.GetComponent<Outline>().enabled = false;
+                        // // TODO: Make sure to remove it from the field.
+                        // editableObject = new GameObject();
+                        // editableObject.AddComponent<Outline>();
                     }
-                    // editableObject.GetComponent<Outline>().enabled = false;
-                    // editableObject = hitObject;
-                    // editableObject.GetComponent<Outline>().enabled = true;
                 }
             }
         }
@@ -76,8 +82,13 @@ public class RealObjectAdder : MonoBehaviour
 
     // Sets visibility of delete button. 
     void deleteObject(){
+        Debug.Log("DEDEDELETE THIS");
         if(editableObject != null && editableObject.name != "AR Default Plane"){
+            Debug.Log("Deleting object: " + editableObject.name);
             editableObject.SetActive(false);
+            editableObject.transform.parent.gameObject.SetActive(false);
+        } else { //
+            Debug.Log("Object: " + editableObject);
         }
     }
 
