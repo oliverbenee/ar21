@@ -6,20 +6,14 @@ using UnityEngine.UI;
 
 public class RealObjectAdder : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject cursorChildObject;
-    [SerializeField]
-    private GameObject ObjectToPlace;
-    [SerializeField]
-    private ARRaycastManager raycastManager;
-    [SerializeField]
-    private bool useCursor = false;
-    [SerializeField]
-    private Button clearAllButton;
-    [SerializeField]
-    private Button enablePlaceButton;
-    [SerializeField]
-    private Button confirmButton;
+    [SerializeField] private GameObject cursorChildObject;
+    [SerializeField] private GameObject ObjectToPlace;  
+    [SerializeField] private ARRaycastManager raycastManager;
+    [SerializeField] private bool useCursor = false;
+    [SerializeField] private Button clearAllButton;
+    [SerializeField] private Button enablePlaceButton;
+    [SerializeField] private Button confirmButton;
+    [SerializeField] private Button deleteSelectedButton;
 
     //List of gameobjects used for delete function.
     private List<GameObject> objects = new List<GameObject>();
@@ -33,7 +27,8 @@ public class RealObjectAdder : MonoBehaviour
         // Place object button
         enablePlaceButton.onClick.AddListener(enablePlace);
         confirmButton.onClick.AddListener(placeObject);
-        clearAllButton.onClick.AddListener(deleteObjects);
+        clearAllButton.onClick.AddListener(deleteAllObjects);
+        deleteSelectedButton.onClick.AddListener(deleteObject);
     }
 
     // Update is called once per frame
@@ -45,11 +40,13 @@ public class RealObjectAdder : MonoBehaviour
             // register when an object is pressed.
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
+            // set editableObject as current object and highlight only that one.
             if(Physics.Raycast(ray, out hit)) { 
                 var worldClickPosition = hit.point;
                 // So this is how you get the object:
                 editableObject = hit.collider.gameObject.transform.parent.gameObject;
                 Debug.Log("Selected object: " + editableObject.name);
+                // Highlighting a selected object.
                 foreach (GameObject go in objects)
                 {
                     if(go != editableObject){
@@ -58,20 +55,16 @@ public class RealObjectAdder : MonoBehaviour
                         go.GetComponent<Outline>().enabled = true;
                     }
                 }
+                // TODO: Activate relevant buttons. 
             }
         } 
     }
 
-    // Sets visibility of cursor and confirmbutton. Sets useCursor.
-    void setPlace(bool state){
-        cursorChildObject.gameObject.SetActive(state);
-        confirmButton.gameObject.SetActive(state);
-        useCursor = state;
-    }
-
     // Sets visibility of delete button. 
-    void setDelete(bool state){
-        Destroy(editableObject);
+    void deleteObject(){
+        if(editableObject != null && editableObject.name != "AR Default Plane"){
+            editableObject.SetActive(false);
+        }
     }
 
     // Toggles visibility of the cursor and confirm button. Toggles useCursor.
@@ -100,11 +93,10 @@ public class RealObjectAdder : MonoBehaviour
     }
 
     // When requested by a button press, destroy all objects.
-    void deleteObjects(){
+    void deleteAllObjects(){
         Debug.Log("call deleteobjects");
         // Iterate through list and hide those objects.
         foreach(GameObject u in objects) {
-            //For some reason, we CANNOT destory the object. Because that would make sense right?
             u.SetActive(false);
         }
         objects.Clear();
