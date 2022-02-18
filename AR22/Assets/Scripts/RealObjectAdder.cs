@@ -29,11 +29,12 @@ public class RealObjectAdder : MonoBehaviour
         confirmButton.onClick.AddListener(placeObject);
         clearAllButton.onClick.AddListener(deleteAllObjects);
         deleteSelectedButton.onClick.AddListener(deleteObject);
+        editableObject = new GameObject();
+        editableObject.AddComponent<Outline>();
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update(){
         if(useCursor){UpdateCursor();}
         // Checks if a placed gameobject is pressed.
         if(Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began){
@@ -44,21 +45,28 @@ public class RealObjectAdder : MonoBehaviour
             if(Physics.Raycast(ray, out hit)) { 
                 var worldClickPosition = hit.point;
                 // So this is how you get the object:
-                editableObject = hit.collider.gameObject.transform.parent.gameObject;
-                Debug.Log("Selected object: " + editableObject.name);
-                // Highlighting a selected object.
-                foreach (GameObject go in objects)
-                {
-                    if(go != editableObject){
-                        go.GetComponent<Outline>().enabled = false;
-                    } else {
-                        go.GetComponent<Outline>().enabled = true;
+                GameObject hitObject = hit.collider.gameObject.transform.parent.gameObject;
+                Debug.Log("Selected object: " + hitObject.name);
+                // Confirm if it is not a re-selection.
+                Debug.Log("OLD OBJECT: " + editableObject);
+                bool isSameObject = hitObject == editableObject;
+                if(isSameObject){
+                    Debug.Log("Selected the same object.");
+                    // editableObject.GetComponent<Outline>().enabled = false;
+                } else { // Not the same object. editableObject != hitObject.
+                    Debug.Log("New object selected");
+                    if(hitObject.name == "BMXBikeE(Clone)"){ // Hit a bike.
+                        Debug.Log("Hit a bike!");
+                    } else { // Did not hit a bike.
+                        Debug.Log("Hit a " + hitObject.name + " instead");
                     }
+                    // editableObject.GetComponent<Outline>().enabled = false;
+                    // editableObject = hitObject;
+                    // editableObject.GetComponent<Outline>().enabled = true;
                 }
-                // TODO: Activate relevant buttons. 
             }
-        } 
-    }
+        }
+    } 
 
     // Sets visibility of delete button. 
     void deleteObject(){
@@ -97,7 +105,6 @@ public class RealObjectAdder : MonoBehaviour
         Debug.Log("call deleteobjects");
         // Iterate through list and hide those objects.
         foreach(GameObject u in objects) {
-            //For some reason, we CANNOT destory the object. Because that would make sense right?
             u.SetActive(false);
         }
         objects.Clear();
