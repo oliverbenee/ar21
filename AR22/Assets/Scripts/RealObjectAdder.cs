@@ -97,6 +97,7 @@ public class RealObjectAdder : MonoBehaviour
         Debug.Log("call deleteobjects");
         // Iterate through list and hide those objects.
         foreach(GameObject u in objects) {
+            //For some reason, we CANNOT destory the object. Because that would make sense right?
             u.SetActive(false);
         }
         objects.Clear();
