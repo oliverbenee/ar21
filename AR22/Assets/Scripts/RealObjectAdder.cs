@@ -36,8 +36,8 @@ public class RealObjectAdder : MonoBehaviour
     // Update is called once per frame
     void Update(){
         if(useCursor){UpdateCursor();}
-        // Checks if a placed gameobject is pressed.
-        if(Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began){
+        // Checks if a placed gameobject is pressed. This is the activation thing. 
+        if(Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began){
             // register when an object is pressed.
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -52,7 +52,6 @@ public class RealObjectAdder : MonoBehaviour
                 // Confirm if it is not a re-selection.
                 Debug.Log("OLD OBJECT: " + editableObject);
                 bool isSameObject = hitObject == editableObject;
-                // STATUS: 
                 if(isSameObject){
                     Debug.Log("Selected the same object.");
                     editableObject.GetComponent<Outline>().enabled = false;
@@ -78,6 +77,29 @@ public class RealObjectAdder : MonoBehaviour
                 }
             }
         }
+
+        // Checks if a gameobject is dragged. This should drag the object. It will drag exactly to where you are pointing. 
+        if(Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved){
+            if(editableObject.name == "BMXBikeE(Clone)"){
+                Debug.Log("DRAGGGGGGG");
+                //This is sourced from youtube.com/watch?v=3_CX-KtsDic
+                var speedModifier = 0.01f;
+                editableObject.transform.position = new Vector3(
+                    transform.position.x + Input.GetTouch(0).deltaPosition.x * speedModifier,
+                    transform.position.y + Input.GetTouch(0).deltaPosition.y * speedModifier);
+                //editableObject.transform.Rotate(0f, touch.deltaPosition.x, 0f); // This rotates things. Oops LOL. 
+
+                var y = editableObject.transform.position.y;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if(Physics.Raycast(ray, out hit)) { 
+                    var worldClickPosition = hit.point;
+                    editableObject.transform.position = worldClickPosition;
+                }
+            }
+        }
+
+        // Checks if a gameobject is rotated. This should rotate the object.
     } 
 
     // Sets visibility of delete button. 
