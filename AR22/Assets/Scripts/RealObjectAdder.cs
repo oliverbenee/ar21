@@ -33,7 +33,9 @@ public class RealObjectAdder : MonoBehaviour
         editableObject.AddComponent<Outline>();
     }
 
-    bool isRotating = false;
+    bool touchMutex;
+    Vector2 touch1, touch2, D1;
+    float oldAngle;
     // Update is called once per frame
     void Update(){
         if(useCursor){UpdateCursor();}
@@ -104,19 +106,26 @@ public class RealObjectAdder : MonoBehaviour
         // https://stackoverflow.com/questions/32634791/calculate-touch-rotation-angle-with-two-fingers
         if(Input.touchCount == 2){
             Debug.Log("Rotate");
-            var touch1 = Input.GetTouch(0).position;
-            var touch2 = Input.GetTouch(1).position;
-            var D1 = touch1-touch2;
+            if(touchMutex == false){
+                touch1 = Input.GetTouch(0).position;
+                touch2 = Input.GetTouch(1).position;
+                D1 = touch1-touch2;
+                touchMutex = true;
+            }
             Vector2 D2 = new Vector2(0,0);
             // Still dragging so recalculate.
-            if(Input.GetTouch(0).phase == TouchPhase.Moved && Input.GetTouch(1).phase == TouchPhase.Moved){
+            if(Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(1).phase == TouchPhase.Moved){
                 var targetTouch1 = Input.GetTouch(0).position;
                 var targetTouch2 = Input.GetTouch(1).position;
                 D2 = targetTouch1 - targetTouch2;
+                var angle = Mathf.Atan2(D1.y, D1.x)-Mathf.Atan2(D2.y,D2.x);
+                if(!D2.Equals(new Vector2(0,0))){
+                    Debug.Log("Rotating to angle: " + angle + ". D1: " + D1 + ". D2: " + D2);
+                    editableObject.transform.rotation = new Quaternion(0, angle, 0, 1);
+                    oldAngle = angle;
+                }
             }
-            var angle = Mathf.Atan2(D2.y, D2.x)-Mathf.Atan2(D1.y,D1.x);
-            Debug.Log("Rotating by: " + angle + " degrees. D1: " + D1 + ". D2: " + D2);
-            editableObject.transform.Rotate(0, angle, 0, Space.Self);
+
             // Solve: atan2(D2.y, D2.x)-atan2(D1.y, D1.x), where D1 is the starting angle, and D2 is the finishing angle. 
 
             // // Try 2.
@@ -130,7 +139,9 @@ public class RealObjectAdder : MonoBehaviour
             //     editableObject.transform.rotation = Quaternion.Euler(0.0f, editableObject.transform.rotation.eulerAngles.y + angle*10, 0.0f);
             //     _startPosition = currVector;
             // }
-        } 
+        } else {
+            touchMutex = false;
+        }
     } 
 
     // Sets visibility of delete button. 
