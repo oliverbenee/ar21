@@ -28,7 +28,7 @@ For the purpose of creating an AR application with the ability to add objects to
 * Attached to this GameObject we add an AR Camera, which is used for the viewport of the user. Everything they see is dictated by the AR camera.
 * Additionally, we attach an AR Default Plane GameObject. This feature is used for the raycast functionality, but adds ugly yellow planes. Therefore, the image view is disabled as shown in the image below. 
 
-![ALT](111_DisabledPlane.PNG)
+![ALT](https://gitlab.au.dk/au598997/ar21/-/raw/assignment_3/Images/111_DisabledPlane.PNG)
 
 This solves the active plane tracking. Next, we concern ourselves with the button to add objects to the world. For this purpose, we created an 'enablePlaceButton'. This button calls the function 'enablePlace', which toggles the state of the cursor and 'confirmButton' (used to place objects). To toggle this button, we have set a listener to toggle the enablePlace() method, which enables the placeobject button and the AR cursor. It does so by enabling the cursor gameobject and changing the useCursor variable, used for telling whether the cursor is active or not. For reference, please see the code snippet below. 
 
@@ -279,7 +279,7 @@ This code uses raycast to find a position on the screen, and translates it into 
 
 > 3.2.2: Explain your solution. You must also - in detail - explain the math behind your solution (including some kind of sketch).
 
-The gist of our implementation of rotation uses the function Atan2. Our solution is based on the proposal found ![HERE](https://stackoverflow.com/questions/32634791/calculate-touch-rotation-angle-with-two-fingers)
+The gist of our implementation of rotation uses the function Atan2. Our solution is based on the proposal found ![HERE](https://stackoverflow.com/questions/32634791/calculate-touch-rotation-angle-with-two-fingers 'Source for rotation')
 
 We start by assuming, that the first touch(X,Y) is the "straightline angle". We use this to calculate a "start vector" D1=A1-B1, where A1 and B1 are the two touch points. For reference, see the code below:
 
@@ -324,10 +324,10 @@ if(!D2.Equals(new Vector2(0,0))){
 After guarding against the error, as can be seen, we set the rotation to a fixed amount, based on how much the user turns their finger. This way, the GameObject doesn't rapidly spin when the user starts to turn the object. 
 
 ## Goal & Plan
-Build a functioning appplication, that allows for placement, deletion, movement, and rotation of MOs.
+Expand our AR Application to allow for placement, deletion, movement, and rotation of our Meaningful Objects. The placement option should toggle the raycast function as to not be in the way of the user, when they interact with gameobjects. We intend to implement this by following the task description for Assignment 3. 
 
 ## Results
-Our application now allows for the placement of meaningful objects. These objects can be moved, deleted, and rotated. 
+Our application now allows for the placement of meaningful objects. The placing mode is togglable via. an on-screen button. These objects can be moved, deleted, and rotated. Additionally, all objects can be deleted via. a "trashcan". 
 
 ## Conclusion
-We have successfully created an application that allows placement and basic manipulation of our MO.
+We have successfully created an application that allows placement and basic manipulation of the gameobject. 
