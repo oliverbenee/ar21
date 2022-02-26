@@ -98,12 +98,9 @@ Back in the MenuButtonManager, it then determines itself to close the menu after
 
 After the menu has been closed, the user can place and edit gameobjects the same way they are used to previously, through the enablePlaceButton, and the placeObjectButton. The advantage of this solution is, that this allows loose coupling between the RealObjectAdder, the DataHandler, and the MenuButtonManager, but comes at the cost of high code complexity, but since we cannot access the RealObjectAdder directly from the MenuButtonManager, and thereby broadcast when an object has been selected, we have to run SetPlace() from the RealObjectAdder once it opens the menu. A disadvantage of our approach is, however, that the user can press the placeObjectButton before opening the menu and selecting a gameobject. This causes a NullPointerException normally, which causes AR tracking issues. Thus, to mitigate this, we set a deafult vase, being the Vase_Amphora. This completes the interaction loop with the object catalog. 
 
-To see a video demonstrating the final result, click HERE. 
+To see a video demonstrating the final result, click [HERE.](https://youtu.be/Lztn7zc0sDE)
 
-
-TODO: 
-- Fix outline. 
-- Video. 
+Seperate link: https://youtu.be/Lztn7zc0sDE
 
 ### Exercise 2.1
 
