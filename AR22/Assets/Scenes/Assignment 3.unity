@@ -501,7 +501,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorChildObject: {fileID: 40919614}
-  ObjectToPlace: {fileID: 6669599918551377397, guid: 1539865e7e6633d48ae273348fe7f433, type: 3}
+  ObjectToPlace: {fileID: 1739541281279610, guid: 30a3561e72e42d045a72040495368d04, type: 3}
   raycastManager: {fileID: 1541080023}
   useCursor: 0
   clearAllButton: {fileID: 2019209813}

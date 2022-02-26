@@ -7,13 +7,15 @@ using UnityEngine.UI;
 public class RealObjectAdder : MonoBehaviour
 {
     [SerializeField] private GameObject cursorChildObject;
-    [SerializeField] private GameObject ObjectToPlace;  
     [SerializeField] private ARRaycastManager raycastManager;
     [SerializeField] private bool useCursor = false;
     [SerializeField] private Button clearAllButton;
     [SerializeField] private Button enablePlaceButton;
     [SerializeField] private Button confirmButton;
     [SerializeField] private Button deleteSelectedButton;
+    [SerializeField] private GameObject menuCanvas;
+    [SerializeField] private Button drawerButton;
+    [SerializeField] private Button animationButton;
 
     //List of gameobjects used for delete function.
     private List<GameObject> objects = new List<GameObject>();
@@ -31,6 +33,7 @@ public class RealObjectAdder : MonoBehaviour
         deleteSelectedButton.onClick.AddListener(deleteObject);
         editableObject = new GameObject();
         editableObject.AddComponent<Outline>();
+        drawerButton.onClick.AddListener(openMenu);
     }
 
     bool touchMutex;
@@ -41,6 +44,7 @@ public class RealObjectAdder : MonoBehaviour
         if(useCursor){UpdateCursor();}
         // Checks if a placed gameobject is pressed. This is the activation thing. 
         if(Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began){
+            Debug.Log("PRESSSS");
             // register when an object is pressed.
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -57,48 +61,69 @@ public class RealObjectAdder : MonoBehaviour
                 bool isSameObject = hitObject == editableObject;
                 if(isSameObject){
                     Debug.Log("Selected the same object.");
-                    editableObject.GetComponent<Outline>().enabled = false;
-                    hitObject.GetComponent<Outline>().enabled = false;
+                    var c = editableObject.GetComponentsInChildren<Outline>();
+                    foreach(Outline ol in c){ol.enabled = false;}
+                    c = hitObject.GetComponentsInChildren<Outline>();
+                    foreach(Outline ol in c){ol.enabled = false;}
                     editableObject = new GameObject();
-                    editableObject.AddComponent<Outline>(); // This prevents am error when not hitting a bike, and no bike is being edited.
+                    editableObject.AddComponent<Outline>(); // This prevents am error when not hitting an object, and no object is being edited.
                 } else { // Not the same object. editableObject != hitObject.
                     // STATUS: 
                     Debug.Log("New object selected");
-                    if(hitObject.name == "BMXBikeE(Clone)"){ // Hit a bike.
-                        Debug.Log("Hit a bike!");
-                        editableObject.GetComponent<Outline>().enabled = false;
+                    if(hitObject.name != "AR Default Plane" || hitObject.name != "ARPlane"){ // Hit a gameobject. Not the plane. 
+                        Debug.Log("Hit: " + hitObject.name);
+                        var c = editableObject.GetComponentsInChildren<Outline>();
+                        foreach(Outline ol in c){ol.enabled = false;}
                         editableObject = hitObject;
-                        hitObject.GetComponent<Outline>().enabled = true;
+                        c = hitObject.GetComponentsInChildren<Outline>();
+                        foreach(Outline ol in c){ol.enabled = true;}
                     // STATUS: 
-                    } else { // Did not hit a bike.
+                    } else { // Did not hit a gameobject. Unhighlight object.
                         Debug.Log("Hit a " + hitObject.name + " instead");
-                        editableObject.GetComponent<Outline>().enabled = false;
+                        var c = editableObject.GetComponentsInChildren<Outline>();
+                        foreach(Outline ol in c){ol.enabled = false;}
                         // // TODO: Make sure to remove it from the field.
                         // editableObject = new GameObject();
                         // editableObject.AddComponent<Outline>();
                     }
                 }
+            } else {
+                Debug.Log("Did not hit anything.");
             }
         }
 
         // Checks if a gameobject is dragged. This should drag the object. It will drag exactly to where you are pointing. 
         if(Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved){
-            if(editableObject.name == "BMXBikeE(Clone)"){
-                Debug.Log("DRAGGGGGGG");
+            if(editableObject.name != "AR Default Plane" && editableObject.name != "Trackables"){
+                Debug.Log("DRAGGGGGGG " + editableObject.name);
+                // THIS CODE CAUSES THE GAMEOBJECT TO RAPIDLY MOVE INTO YOUR FACE SO DONT USE IT JIM. 
                 //This is sourced from youtube.com/watch?v=3_CX-KtsDic
-                var speedModifier = 0.01f;
-                editableObject.transform.position = new Vector3(
-                    transform.position.x + Input.GetTouch(0).deltaPosition.x * speedModifier,
-                    transform.position.y + Input.GetTouch(0).deltaPosition.y * speedModifier);
+                // var speedModifier = 0.01f;
+                // editableObject.transform.position = new Vector3(
+                //     transform.position.x + Input.GetTouch(0).deltaPosition.x * speedModifier,
+                //     transform.position.y + Input.GetTouch(0).deltaPosition.y * speedModifier);
                 //editableObject.transform.Rotate(0f, touch.deltaPosition.x, 0f); // This rotates things. Oops LOL. 
 
+                // Define a mask, that prevents us from hitting the same object when dragging.
+                int mask = 1 << LayerMask.NameToLayer("artifact_layer");
+
+
                 var y = editableObject.transform.position.y;
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);                
                 RaycastHit hit;
                 if(Physics.Raycast(ray, out hit)) { 
-                    var worldClickPosition = hit.point;
-                    editableObject.transform.position = worldClickPosition;
+                    if(hit.collider.gameObject.layer != LayerMask.NameToLayer("artifact_layer")){
+                        var worldClickPosition = hit.point;
+                        // The if-check prevents a strange bug, where raycast seemingly teleports the gameobject into the screen. 
+                        // No idea what causes it. I haven't touched the raycast code before the bug i swear. 
+                        if(editableObject.transform.position != new Vector3(0.9f,-1.0f,1.9f)){
+                            editableObject.transform.position = worldClickPosition;
+                            Debug.Log("Target position: " + worldClickPosition.ToString());
+                        }
+                    }
                 }
+            } else {
+                Debug.Log("dont drag the ar planes it breaks the system thanks");
             }
         }
 
@@ -144,7 +169,7 @@ public class RealObjectAdder : MonoBehaviour
         }
     } 
 
-    // Sets visibility of delete button. 
+    // Sets a gameobject as inactive. 
     void deleteObject(){
         Debug.Log("DEDEDELETE THIS");
         if(editableObject != null && editableObject.name != "AR Default Plane"){
@@ -154,6 +179,12 @@ public class RealObjectAdder : MonoBehaviour
         } else { //
             Debug.Log("Object: " + editableObject);
         }
+    }
+
+    // Open the object catalog.
+    void openMenu(){
+        menuCanvas.SetActive(true);
+        Debug.Log("MENUUUUU");
     }
 
     // Toggles visibility of the cursor and confirm button. Toggles useCursor.
@@ -170,14 +201,14 @@ public class RealObjectAdder : MonoBehaviour
         Debug.Log("call placeobject");
         Vector3 position = transform.position; 
         Vector3 position2 = new Vector3(position.x, position.y, position.z);
-        GameObject go = Instantiate(ObjectToPlace, position2, transform.rotation);
+        GameObject go = Instantiate(DataHandler.Instance.artifact, position2, transform.rotation);
         objects.Add(go);
 
         // Add a hidden outline to the object.
         var outline = go.AddComponent<Outline>();
         outline.OutlineMode = Outline.Mode.OutlineAll;
         outline.OutlineColor = Color.yellow;
-        outline.OutlineWidth = 5f;
+        outline.OutlineWidth = 5f; // 5f is good for scale 0.2
         outline.enabled = false;
     }
 
