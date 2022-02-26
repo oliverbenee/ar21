@@ -765,6 +765,7 @@ MonoBehaviour:
   deleteSelectedButton: {fileID: 1465554497}
   menuCanvas: {fileID: 1219450558}
   drawerButton: {fileID: 16078573}
+  animationButton: {fileID: 0}
 --- !u!4 &223974228
 Transform:
   m_ObjectHideFlags: 0
