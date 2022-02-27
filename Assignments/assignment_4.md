@@ -1,11 +1,12 @@
 # Assignment 4 - Interaction techniques (graded)
 
-**Date**: [TODO: date]
+**Date**: 28.02.2022
 
-**Group members participating**: [TODO: insert names]
+**Group members participating**: Oliver Benée Petersen, Thorben Christopher Schmidt
 
 **Activity duration**: 
-- About 18 hours on Exercise 1. 
+- About 18 hours on Exercise 1.
+- About ...
 
 ## Goal
 Formulate the new project idea. Implement object catalogue and assignment 4.
