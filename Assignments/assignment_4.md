@@ -106,9 +106,63 @@ Seperate link: https://youtu.be/Lztn7zc0sDE
 
 ### Exercise 2.1
 
-In this exercise, we want to extend the funcitonality of a gameobject through an animation added to a selected object. The intent is, that whenever a gameobject is selected, we want to add an option to create an effect on the gameobject, that is directly attached to it, and independent of the rest of the objects. 
+In this exercise, we want to extend the functionality of a gameobject through an animation added to a selected object. The intent is, that whenever a gameobject is selected, we want to add an option to create an effect on the gameobject, that is directly attached to it, and independent of the rest of the objects. In our case, we want to use animations to enhance the atmosphere of our program through particle effects. 
 
-To solve this, we intend to create a button, which will appear once an object is seleted, which 
+To solve this, we intend to create a button, which will appear once an object is seleted. This button, when pressed, should toggle a particle effect, which will add small "magical" particles to the artifact. We believe, that this enhance the experience by adding a the "mystery" and "ancient magic" theme to our project. 
+
+To begin, we first created the GameObject "particle system", which can be attached to other gameobjects. This gameobject contains a component with unity's Particle System attached to it. For reference, see the image below:
+
+![PARTICLES](https://gitlab.au.dk/au598997/ar21/-/raw/68a74cdd72642477ab20fa53613b33d2dcd1bc2d/Images/particles.PNG)
+
+Originally, our idea was to add these particle effects as a component to the main artifact, which could be enabled and disabled at runtime using the built-in Play() and Pause() methods, that emitters have. However, there are two limitations to this approach. The first is, that we during testing found inconsistent behaviour with registering if an emitter was playing or pausing, which meant that the emitter would not always be played or paused. The second is, that by adding the component and removing it at runtime, we open up for changing the type of emitter to be used at runtime much easier, since we only have to instantiate the particleEffect, we wish to apply at runtime, then deleting it, rather than having to pre-determine a certain amount and types of particle effects we wish to add, and then modifying those existing components to what we need. 
+
+Regarding the implementation, we started by creating an Animate() method for handling the animation. It starts by searching for any potential emitters on the gameObject already: 
+
+```
+// Do the animation. 
+void Animate(){
+  Debug.Log("ANIMATIOOOOOOONS");
+  GameObject emitter = FindGameObjectInChildWithTag(editableObject, "particle");
+  [...]
+}
+```
+
+The FindGameObjectInChildWithTag method is based on [THIS](https://answers.unity.com/questions/893966/how-to-find-child-with-tag.html), which iterates through the specified gameobject and all of its children. When iterating, it looks through all child-gameobjects, and returns the first child with the tag specified. 
+
+```
+public static GameObject FindGameObjectInChildWithTag (GameObject parent, string tag){
+  Transform t = parent.transform;
+  for (int i = 0; i < t.childCount; i++) {
+  Debug.Log("Found first child. " + t.GetChild(i));
+  Debug.Log("Child has the tag: " + t.GetChild(i).tag);
+    if(t.GetChild(i).gameObject.tag == tag){
+      Debug.Log("Found: " + t.GetChild(i).gameObject.name);
+      return t.GetChild(i).gameObject;
+    }    
+  }   
+  Debug.Log("Found nothing.");
+  return null;
+} 
+```
+
+In the code snippet specified above, the method grabs the transform of the parent gameobject to find all children associated with the gameobject. For each of these children, it uses the GetChild() method to look through the child objects of the gameobject. If the child is found to have the tag specified in the method header to be looked for, it returns this child object as a gameobject. This allows us to browse through a gameobject to look for certain tagged gameobjects to be used. 
+
+Back in the Animate() method, we can now look at if we got an emitter-tagged gameobject:
+
+```
+if(emitter){
+  Debug.Log("found an emitter. destroying it.");
+  Destroy(emitter);
+} else {
+  Debug.Log("Error: No emitter found.");
+  GameObject particles = Instantiate(particleEffect, editableObject.transform);
+  particles.tag = "particle";
+}
+```
+
+If we found an emitter on the editableObject, we destroy it, which will stop the particle effects. Otherwise, we add a particle emitter to the gameobject, and tag it as "particle", which will allow the emitter to be found by FindGameObjectInChildWithTag() method. 
+
+To see a video of this in action, please see HERE: 
 
 [TODO: results for this weeks exercises]
 
