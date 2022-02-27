@@ -1,12 +1,14 @@
 # Assignment 4 - Interaction techniques (graded)
 
-**Date**: 28.02.2022
+**Date**: [TODO: date]
 
-**Group members participating**: Oliver Benée Petersen, Thorben Christopher Schmidt
+**Group members participating**: [TODO: insert names]
 
 **Activity duration**: 
-- About 18 hours on Exercise 1.
-- About ...
+- About 18 hours on Exercise 1. 
+- About 40 hours on Exercise 2. 
+
+These are estimates, i forgot to keep track of the time. 
 
 ## Goal
 Formulate the new project idea. Implement object catalogue and assignment 4.
@@ -31,7 +33,7 @@ To solve this problem, we first start by considering the potential menu options.
 ![MENUOFF](https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/menuoff.png)
 ![MENUON](https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/menuon.png)
 
-The menu is activated through the "+" button seen on the image with the menu off. It runs a method openMenu() which enables the menu. 
+The menu is activated through the three-lines button seen on the image with the menu off. It runs a method openMenu() which enables the menu. 
 
 ```
 void openMenu(){
