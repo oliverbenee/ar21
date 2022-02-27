@@ -98,28 +98,19 @@ Back in the MenuButtonManager, it then determines itself to close the menu after
 
 After the menu has been closed, the user can place and edit gameobjects the same way they are used to previously, through the enablePlaceButton, and the placeObjectButton. The advantage of this solution is, that this allows loose coupling between the RealObjectAdder, the DataHandler, and the MenuButtonManager, but comes at the cost of high code complexity, but since we cannot access the RealObjectAdder directly from the MenuButtonManager, and thereby broadcast when an object has been selected, we have to run SetPlace() from the RealObjectAdder once it opens the menu. A disadvantage of our approach is, however, that the user can press the placeObjectButton before opening the menu and selecting a gameobject. This causes a NullPointerException normally, which causes AR tracking issues. Thus, to mitigate this, we set a deafult vase, being the Vase_Amphora. This completes the interaction loop with the object catalog. 
 
-To see a video demonstrating the final result, click HERE. 
+This now fulfills the requirements of allowing multiple objects to be placed by having a menu pop up from the bottom with a list of all available gameobjects to place. Given that the list can be infitetely expanded and scrolled in, it allows handling of "a lot" of objects. 
 
+To see a video demonstrating the final result, click [HERE.](https://youtu.be/Lztn7zc0sDE)
 
-TODO: 
-- Fix outline. 
-- Video. 
+Seperate link: https://youtu.be/Lztn7zc0sDE
 
 ### Exercise 2.1
 
-In this exercise, we want to extend the funcitonality of a gameobject through an animation. 
-We want to extend the functionality when a user have selected an object. Thus, the functionality you implement in the sub-exercises below should work individually for each object
+In this exercise, we want to extend the funcitonality of a gameobject through an animation added to a selected object. The intent is, that whenever a gameobject is selected, we want to add an option to create an effect on the gameobject, that is directly attached to it, and independent of the rest of the objects. 
+
+To solve this, we intend to create a button, which will appear once an object is seleted, which 
 
 [TODO: results for this weeks exercises]
-
-### Technique 1 - [TODO: Name]
-[TODO: description]
-
-### Technique 2 - [TODO: Name]
-[TODO: description]
-
-### Technique 3 - [TODO: Name]
-[TODO: description]
 
 ## Conclusion
 [TODO: conclusions of this weeks exercises]

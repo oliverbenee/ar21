@@ -15,6 +15,15 @@
 ## Results
 [TODO: results for this weeks exercises]
 
+### Technique 1 - [TODO: Name]
+[TODO: description]
+
+### Technique 2 - [TODO: Name]
+[TODO: description]
+
+### Technique 3 - [TODO: Name]
+[TODO: description]
+
 ## Conclusion
 [TODO: conclusions of this weeks exercises]
 
