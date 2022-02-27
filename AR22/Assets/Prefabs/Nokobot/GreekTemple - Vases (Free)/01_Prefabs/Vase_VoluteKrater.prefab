@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 23298315475871408}
   - component: {fileID: 2907295803579455729}
   m_Layer: 6
-  m_Name: Vase_2_VoluteKrater_Mesh
+  m_Name: Vase_VoluteKrater_Mesh
   m_TagString: selectable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

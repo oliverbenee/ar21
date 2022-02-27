@@ -16,12 +16,16 @@ public class RealObjectAdder : MonoBehaviour
     [SerializeField] private GameObject menuCanvas;
     [SerializeField] private Button drawerButton;
     [SerializeField] private Button animationButton;
+    [SerializeField] private Button styleButton;
+    [SerializeField] private GameObject styleCanvas;
 
     //List of gameobjects used for delete function.
     private List<GameObject> objects = new List<GameObject>();
 
     //GameObject selected for editing. PreviousObject is used to disable the outline, and to deselct an object.
     private GameObject editableObject;
+    [SerializeField]
+    private GameObject particleEffect;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,6 +38,8 @@ public class RealObjectAdder : MonoBehaviour
         editableObject = new GameObject();
         editableObject.AddComponent<Outline>();
         drawerButton.onClick.AddListener(openMenu);
+        animationButton.onClick.AddListener(Animate);
+        styleButton.onClick.AddListener(openMaterialMenu);
     }
 
     bool touchMutex;
@@ -67,6 +73,7 @@ public class RealObjectAdder : MonoBehaviour
                     foreach(Outline ol in c){ol.enabled = false;}
                     editableObject = new GameObject();
                     editableObject.AddComponent<Outline>(); // This prevents am error when not hitting an object, and no object is being edited.
+                    isEditing(false);
                 } else { // Not the same object. editableObject != hitObject.
                     // STATUS: 
                     Debug.Log("New object selected");
@@ -77,6 +84,7 @@ public class RealObjectAdder : MonoBehaviour
                         editableObject = hitObject;
                         c = hitObject.GetComponentsInChildren<Outline>();
                         foreach(Outline ol in c){ol.enabled = true;}
+                        isEditing(true);
                     // STATUS: 
                     } else { // Did not hit a gameobject. Unhighlight object.
                         Debug.Log("Hit a " + hitObject.name + " instead");
@@ -85,6 +93,7 @@ public class RealObjectAdder : MonoBehaviour
                         // // TODO: Make sure to remove it from the field.
                         // editableObject = new GameObject();
                         // editableObject.AddComponent<Outline>();
+                        isEditing(false);
                     }
                 }
             } else {
@@ -94,6 +103,7 @@ public class RealObjectAdder : MonoBehaviour
 
         // Checks if a gameobject is dragged. This should drag the object. It will drag exactly to where you are pointing. 
         if(Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved){
+            Debug.Log("PREPARE DRAGGING SUCKASS");
             if(editableObject.name != "AR Default Plane" && editableObject.name != "Trackables"){
                 Debug.Log("DRAGGGGGGG " + editableObject.name);
                 // THIS CODE CAUSES THE GAMEOBJECT TO RAPIDLY MOVE INTO YOUR FACE SO DONT USE IT JIM. 
@@ -119,8 +129,14 @@ public class RealObjectAdder : MonoBehaviour
                         if(editableObject.transform.position != new Vector3(0.9f,-1.0f,1.9f)){
                             editableObject.transform.position = worldClickPosition;
                             Debug.Log("Target position: " + worldClickPosition.ToString());
+                        } else {
+                            Debug.Log("Tried to move: " + editableObject.name + " to (0.9, -1.0, 1.9)");
                         }
+                    } else {
+                        Debug.Log("hit the artifact layer.");
                     }
+                } else {
+                    Debug.Log("Raycast hit nothing. No movement.");
                 }
             } else {
                 Debug.Log("dont drag the ar planes it breaks the system thanks");
@@ -174,10 +190,12 @@ public class RealObjectAdder : MonoBehaviour
         Debug.Log("DEDEDELETE THIS");
         if(editableObject != null && editableObject.name != "AR Default Plane"){
             Debug.Log("Deleting object: " + editableObject.name);
+            Destroy(FindGameObjectInChildWithTag(editableObject, "particle"));
             editableObject.SetActive(false);
-            editableObject.transform.parent.gameObject.SetActive(false);
+            isEditing(false);
         } else { //
             Debug.Log("Object: " + editableObject);
+            Debug.Log("Parent is: " + editableObject.gameObject.transform.parent);
         }
     }
 
@@ -210,6 +228,14 @@ public class RealObjectAdder : MonoBehaviour
         outline.OutlineColor = Color.yellow;
         outline.OutlineWidth = 5f; // 5f is good for scale 0.2
         outline.enabled = false;
+
+        // // Add particle effect element. We have to add the local variable here, because otherwise it attaches the prefab field
+        // // and bad things happen (TM);
+        // var attachedEffect = particleEffect;
+        // var particle = Instantiate(attachedEffect, editableObject.transform);
+        // particle.tag = "particle";
+        // particle.SetActive(false);
+        // objects.Add(particle); // Lets us delete it later.
     }
 
     // When requested by a button press, destroy all objects.
@@ -217,9 +243,11 @@ public class RealObjectAdder : MonoBehaviour
         Debug.Log("call deleteobjects");
         // Iterate through list and hide those objects.
         foreach(GameObject u in objects) {
-            u.SetActive(false);
+            objects.Remove(u);
+            Destroy(u);
         }
         objects.Clear();
+        isEditing(false);
     }
 
     // Update location of pink cursor
@@ -236,5 +264,56 @@ public class RealObjectAdder : MonoBehaviour
          } else {
              cursorChildObject.SetActive(false);
          }
+    }
+
+    // Do the animation. 
+    void Animate(){
+        Debug.Log("animate");
+        GameObject emitter = FindGameObjectInChildWithTag(editableObject, "particle");
+        objects.Add(emitter);
+        if(emitter){
+            Debug.Log("found an emitter. destroying it.");
+            Destroy(emitter);
+            //if(emitter.isPaused){emitter.Play();} 
+            //else {emitter.Pause();}
+        } else {
+            Debug.Log("No emitter found. Creating a new one on: " + editableObject);
+            var attachedEffect = particleEffect;
+            var particle = Instantiate(attachedEffect, editableObject.transform);
+            particle.tag = "particle";
+        }
+    }
+
+    // Enables and disables buttons based on if an object is selected.
+    void isEditing(bool isEditing){
+        // Delete selected and animation buttons should only be active when an object is selected. so when isEditing is true. 
+        deleteSelectedButton.gameObject.SetActive(isEditing);
+        animationButton.gameObject.SetActive(isEditing);
+        styleButton.gameObject.SetActive(isEditing);
+    }
+
+    // Roixo's answer. https://answers.unity.com/questions/893966/how-to-find-child-with-tag.html
+    public static GameObject FindGameObjectInChildWithTag (GameObject parent, string tag){
+        Transform t = parent.transform;
+        for (int i = 0; i < t.childCount; i++) {
+            Debug.Log("Found first child. " + t.GetChild(i));
+            Debug.Log("Child has the tag: " + t.GetChild(i).tag);
+            if(t.GetChild(i).gameObject.tag == tag){
+                Debug.Log("Found: " + t.GetChild(i).gameObject.name);
+                return t.GetChild(i).gameObject;
+            }    
+        }   
+        Debug.Log("Found nothing.");
+        return null;
+    }
+
+    // Open the material catalog.
+    void openMaterialMenu(){
+        styleCanvas.SetActive(true);
+        Debug.Log("MENUUUUU");
+    }
+
+    public static void changeMaterial(){
+        editableObject.GetComponent<Renderer>().material = DataHandler.Instance.material;
     }
 }

@@ -5,12 +5,15 @@ MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - cursorChildObject: {instanceID: 0}
-  - ObjectToPlace: {fileID: 1739541281279610, guid: 30a3561e72e42d045a72040495368d04, type: 3}
   - raycastManager: {instanceID: 0}
   - clearAllButton: {instanceID: 0}
   - enablePlaceButton: {instanceID: 0}
   - confirmButton: {instanceID: 0}
   - deleteSelectedButton: {instanceID: 0}
+  - menuCanvas: {instanceID: 0}
+  - drawerButton: {instanceID: 0}
+  - animationButton: {instanceID: 0}
+  - particleEffect: {fileID: 608907015920168525, guid: cc6a880707be52f43ad0d60909e70105, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -8,6 +8,8 @@ TagManager:
   - placeObjectButton
   - bike
   - selectable
+  - emitter
+  - particle
   layers:
   - Default
   - TransparentFX

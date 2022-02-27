@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class DataHandler : MonoBehaviour {
   public GameObject artifact;
+  public Material material;
   private static DataHandler instance; 
   // Use this method anywhere to call properties from the data handler. 
   public static DataHandler Instance {
