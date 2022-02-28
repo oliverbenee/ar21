@@ -62,7 +62,7 @@ We start with the menu canvas, which is a GameObject used to house the "image" t
 
 ![SCROLLRECT](https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/scrollrect.PNG)
 
-This solves the menu background, but now we need to populate the menu with content. We do so by creating a gameobject, we called GridContent. It has the components ContentSizeFitter, LayoutElement, and HorizontalLayoutGroup. These three components together create a horizontal layout of all menu options, that can be scrolled sideways, thanks to the UIBackgroundScrollableList. We can now start populating the menu with options. We do this by creating Button-gameobjects as children. These children have the component Layout Element to fix their size in the list layout, a button to be pressed, and a MenuButtonManager to handle the options pressed. For reference, see the image below: 
+Additionally, we also add a HorizontalLayoutGroup to define the layout, and a ContentSizeFitter+LayoutElement to make every option fit. This solves the menu background, but now we need to populate the menu with content. We do so by creating a gameobject, we called GridContent. It has the components ContentSizeFitter, LayoutElement, and HorizontalLayoutGroup. These three components together create a horizontal layout of all menu options, that can be scrolled sideways, thanks to the UIBackgroundScrollableList. We can now start populating the menu with options. We do this by creating Button-gameobjects as children. These children have the component Layout Element to fix their size in the list layout, a button to be pressed, a Text gameobject with the menu option name on it (so the user can see what it means), and a MenuButtonManager to handle the options pressed. For reference, see the image below: 
 
 ![BUTTONOBJECTS](https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/buttonexamplewithmanager.PNG)
 
@@ -116,7 +116,7 @@ Back in the MenuButtonManager, it then determines itself to close the menu after
 
 After the menu has been closed, the user can place and edit gameobjects the same way they are used to previously, through the enablePlaceButton, and the placeObjectButton. The advantage of this solution is, that this allows loose coupling between the RealObjectAdder, the DataHandler, and the MenuButtonManager, but comes at the cost of high code complexity, but since we cannot access the RealObjectAdder directly from the MenuButtonManager, and thereby broadcast when an object has been selected, we have to run SetPlace() from the RealObjectAdder once it opens the menu. A disadvantage of our approach is, however, that the user can press the placeObjectButton before opening the menu and selecting a gameobject. This causes a NullPointerException normally, which causes AR tracking issues. Thus, to mitigate this, we set a deafult vase, being the Vase_Amphora. This completes the interaction loop with the object catalog. 
 
-This now fulfills the requirements of allowing multiple objects to be placed by having a menu pop up from the bottom with a list of all available gameobjects to place. Given that the list can be infitetely expanded and scrolled in, it allows handling of "a lot" of objects. 
+We argue, that this fulfills the requirements of allowing multiple objects to be placed by having a menu pop up from the bottom with a list of all available gameobjects to place. Given that the list can be infitetely expanded and scrolled in, it allows handling of "a lot" of objects. 
 
 To see a video demonstrating the result, click [HERE.](https://youtu.be/Lztn7zc0sDE)
 
@@ -168,29 +168,118 @@ In the code snippet specified above, the method grabs the transform of the paren
 Back in the Animate() method, we can now look at if we got an emitter-tagged gameobject:
 
 ```
-if(emitter){
-  Debug.Log("found an emitter. destroying it.");
-  Destroy(emitter);
-} else {
-  Debug.Log("No emitter found. Creating a new one on: " + editableObject);
-  var attachedEffect = particleEffect;
-  var particle = Instantiate(attachedEffect, editableObject.transform);
-  particle.tag = "particle";
+void Animate(){
+  objects.Add(emitter);
+  if(emitter){
+    Debug.Log("found an emitter. destroying it.");
+    Destroy(emitter);
+  } else {
+    Debug.Log("No emitter found. Creating a new one on: " + editableObject);
+    var attachedEffect = particleEffect;
+    var particle = Instantiate(attachedEffect, editableObject.transform);
+    particle.tag = "particle";
+  }
 }
 ```
 
-If we found an emitter on the editableObject, we destroy it, which will stop the particle effects. Otherwise, we Instantiate a child-gameobject to the editableobject, and tag it as "particle", which will allow the emitter to be found by FindGameObjectInChildWithTag() method. 
+We start by adding the emitter to the list of gameobjects. This ensures, that the emitter is destroyed when deleteall is called. If we found an emitter on the editableObject, we destroy it, which will stop the particle effects. Otherwise, we Instantiate a child-gameobject to the editableobject, and tag it as "particle", which will allow the emitter to be found by FindGameObjectInChildWithTag() method. Thus, we have now created a toggle animation feature for our gameobjects. 
 
 To see a video of this in action, please see [HERE.](https://youtu.be/lSrOE4lnVjA)
 
 Seperate link: https://youtu.be/lSrOE4lnVjA
 
+### Exercise 2.2
 
-### Other neat additions. 
+In this exercise, we are asked to add a button, such that the user can change the appearance of an object, i.e. changing between different colors or textures. To implement this feature, we intend to create a menu similar to the object catalog, which instead contains a catalog of all the available materials to be used. The advantage of this approach is, that it allows for a lot of code re-use in the implementation phase, while also keeping the menu visuals consistent. Similarly to the object catalog in Exercise 2.1, we can create the MaterialCatalog by creating a Canvas called MaterialCanvas, adding a gameobject, we call UIBackgroundScrollableList with a scrollrect for horizontal scrolling, and add a GridContent child-object with an image as the background, a ContentSizeFitter to make everything fit in the list, a layout element specifier, and a horizontal layout group for defining the horizontal layout.  
+
+![MATERIALCATALOG](https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/MaterialCatalog.PNG)
+
+Compared to Exercise 1, the main change is that we have replaced the MenuButtonManager with a MaterialMenuManager. This is a very similar script with the key difference being, that it presents the method SelectMaterial(), which returns the material associated with the option rather than the prefab associated with the catalog option. To summarize, the menu is opened with:
+
+```
+// Open the material catalog.
+  void openMaterialMenu(){
+  styleCanvas.SetActive(true);
+  isMenuOpen = true;
+  Debug.Log("MENUUUUU");
+}
+```
+
+Every time a button is pressed, we run the button's associated material handler (seen on the material catalog editor image on the right), which parses a DataHandler with a material, and closes itself again. 
+
+```
+    public Material material;
+    [...]
+    void selectMaterial(){
+        DataHandler.Instance.material = material;
+        Debug.Log("MATERIAL: " + material.name);
+        // This line disables the menu. 
+        this.gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject.SetActive(false);
+        isObjectNull = false;
+        GameObject.Find("AR Cursor").GetComponent<RealObjectAdder>().closeMenu();
+    }
+```
+The MaterialHandler parses the material in each button's handler's field through the DataHandler to the RealObject adder. This is saved in the following field in RealObjectAdder:
+
+```
+  [SerializeField] private Material mate;
+```
+
+After an option has been selected in the material menu, we run CloseMenu(), which closes the menu from the RealObjectAdder, and calls ChangeMaterial(), which is the method changing the shader:
+
+```
+  public void closeMenu(){
+  isMenuOpen = false;
+  Debug.Log("Closing menu. Changing materials.");
+  changeMaterial();
+        
+  // Re-enable outline since you pressed somewhere to add a material. 
+  var outline = editableObject.GetComponent<Outline>().enabled = true;
+}
+```
+
+Here, you notice the changeMaterial method, which is responsible for changing the material of the editableObject. First, it finds the material, it is supposed to change the artifact to, and the gameobject to be changed. 
+
+```
+  public void changeMaterial(){
+    Debug.Log("CHANGING MATEIRALS.");
+    mate = DataHandler.Instance.material;
+    GameObject toBeChanged = FindGameObjectInChildWithTag(shellObject, "physicalObject");
+```
+
+Next, we check, that we aren't changing the material of the planes, we place objects upon, or the empty gameobject used as a placeholder for the editableObject: 
+
+```
+if(shellObject.name != "AR Default Plane" || shellObject.name != "New Game Object")
+```
+
+Now, that we have confirmed, we can change the material on an actual artifact, we create a list of all MeshRenderers on the artifact. This is necessary to make sure, that we change the correct renderer regardless of if the artifact is wrapped in a parent gameobject or not. Then we change all associated materials to the renderer. To avoid cases, where we want to get the material from the object in the future, we run the following: 
+
+List<MeshRenderer> rendererList = new List<MeshRenderer>();
+  foreach (MeshRenderer objectRenderer in shellObject.GetComponentsInChildren<MeshRenderer>()) {
+    if(objectRenderer.name != "ARPlane"){
+    objectRenderer.material = mate;
+    objectRenderer.sharedMaterial = mate;
+}
+
+Using the material and shared materials, we are able to update the material of the artifact itself as well as all components in the future, which will be attached to the artifact, and let them also have this material be applied. Thus, we can now change the appearance of our artifact by using different materials. 
+
+To see a video of this in action, please see [HERE.](https://youtu.be/Rh_FySMDAGs)
+
+### Other neat additions, that don't fit in an exercise. 
+
+In addition to implementing the exercises, we also improved our rotate and moveobject methods from the previous assignment by adding a check for a method "isPointerOverUI()". This method returns if the user is touching a UI component, which we use for checking that the user only drags the artifacts to places they can see on the screen (together with the screen bounds), and don't lose track of the object. 
+
+```
+public bool isPointerOverUI(Touch touch){
+  PointerEventData eventData = new PointerEventData(EventSystem.current);
+  eventData.position = new Vector2(touch.position.x, touch.position.y);
+  List<RaycastResult> results = new List<RaycastResult>();
+  EventSystem.current.RaycastAll(eventData,results);
+  return results.Count > 0;
+}
+```
 
 ## Conclusion
 
 We have now successfully expanded our application to not only allow for adding multiple objects, but also 
-
-## References
-[TODO: used references]
