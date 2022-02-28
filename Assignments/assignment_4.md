@@ -62,26 +62,27 @@ We start with the menu canvas, which is a GameObject used to house the "image" t
 
 ![SCROLLRECT](https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/scrollrect.PNG)
 
-This solves the menu background, but now we need to populate the menu with content. We do so by creating a gameobject, we called GridContent. It has the components ContentSizeFitter, LayoutElement, and HorizontalLayoutGroup, which creates a horizontal layout of all menu options, in a horizontal layout, that can be scrolled sideways, thanks to the UIBackgroundScrollableList. We can now start populating the menu with options. We do this by creating Button-gameobjects as children. For reference, see the image below: 
+This solves the menu background, but now we need to populate the menu with content. We do so by creating a gameobject, we called GridContent. It has the components ContentSizeFitter, LayoutElement, and HorizontalLayoutGroup. These three components together create a horizontal layout of all menu options, that can be scrolled sideways, thanks to the UIBackgroundScrollableList. We can now start populating the menu with options. We do this by creating Button-gameobjects as children. These children have the component Layout Element to fix their size in the list layout, a button to be pressed, and a MenuButtonManager to handle the options pressed. For reference, see the image below: 
 
 ![BUTTONOBJECTS](https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/buttonexamplewithmanager.PNG)
 
-When a menu option is pressed, we trigger a MenuButtonManager, which selects the associated gameobject, and closes the menu:
+When a menu option is pressed, we trigger a MenuButtonManager, which selects the associated gameobject to the button and its manager, and closes the catalog menu:
 
 ```
 public GameObject artifact;
-
+[...]
 void selectObject(){
     DataHandler.Instance.artifact = artifact;
     Debug.Log("ARTIFACT: " + artifact.name);
     // This line disables the menu. 
     this.gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject.SetActive(false);
+    isObjectNull = false;
 }
 ```
 
-Each MenuButtonManager contains a GameObject field, containing the associated artifact, it can instance. It also contains an IsObjectNull, which is used as a failsafe to guard against having the manager parse an empty gameobject. This is checked at runtime, but we serialized the field nonetheless for testing. Thanks to the fact, that each button has its own MenuButtonManager with an associated artifact, our solution can handle "a lot" of objects by just scaling up the scrollable menu, by adding new options for each new artifact, and letting the MenuButtonManager be responsible for converting the button's associated prefab into a gameobject.
+Each MenuButtonManager contains a GameObject field, containing the associated artifact, it can instance. It also contains an IsObjectNull, which is used as a failsafe to guard against having the manager parse an empty gameobject. This is checked at runtime, but we serialized the field nonetheless for testing. Thanks to the fact, that each button has its own MenuButtonManager with an associated artifact, our solution can handle "a lot" of objects by just scaling up the scrollable menu, by adding new options for each new artifact. Each option is another Button in the GridContent with a MenuButtonManager. The MenuButtonManager can then be left responsible for converting the button's associated prefab into a gameobject.
 
-Although the MenuButtonManager contains the gameobject, it is the responsibility of the RealObjectAdder to instantiate the artifact. Thus, to parse the data between each MenuButtonManager, we parse a DataHandler, containing the GameObject to be spawned. 
+Although the MenuButtonManager contains the gameobject, it is the responsibility of the RealObjectAdder to instantiate the artifact. Thus, to parse the data between each MenuButtonManager, we parse a DataHandler, containing the GameObject to be spawned. Its code is as follows:
 
 ```
   public GameObject artifact;
@@ -99,7 +100,7 @@ Although the MenuButtonManager contains the gameobject, it is the responsibility
   }
 ```
 
-To summarize, for every button press, the MenuButtonManager sets all new DataHandler instances to contain the artifact to be instantiated, and closes itself. Then, when the RealObjectAdder wants to place an object, it just instantiates the artifact held by the DataHandler: 
+To summarize, for every button press, the MenuButtonManager sets all new DataHandler instances to contain the artifact to be instantiated, and closes itself. Then, when the RealObjectAdder wants to place an object, it just instantiates the artifact held by the DataHandler. 
 
 ```
 GameObject go = Instantiate(DataHandler.Instance.artifact, position2, transform.rotation);
@@ -131,7 +132,7 @@ To begin, we first created the GameObject "particle system", which can be attach
 
 ![PARTICLES](https://gitlab.au.dk/au598997/ar21/-/raw/68a74cdd72642477ab20fa53613b33d2dcd1bc2d/Images/particles.PNG)
 
-Originally, our idea was to add these particle effects as a component to the main artifact, which could be enabled and disabled at runtime using the built-in Play() and Pause() methods, that emitters have. However, there are two limitations to this approach. The first is, that we during testing found inconsistent behaviour with registering if an emitter was playing or pausing, which meant that the emitter would not always be played or paused. The second is, that by adding the component and removing it at runtime, we open up for changing the type of emitter to be used at runtime much easier, since we only have to instantiate the particleEffect, we wish to apply at runtime, then deleting it, rather than having to pre-determine a certain amount and types of particle effects we wish to add, and then modifying those existing components to what we need. 
+Originally, our idea was to add these particle effects as a component to the main artifact, which could be enabled and disabled at runtime using the built-in Play() and Pause() methods, that emitters have. By adding the component and removing it at runtime, we open up for changing the type of emitter to be used at runtime much easier (as a potential later feature), since we only have to instantiate the particleEffect, we wish to apply at runtime, then deleting it, rather than having to pre-determine a certain amount and types of particle effects we wish to add, and then modifying those existing components to what we need. 
 
 Regarding the implementation, we started by creating an Animate() method for handling the animation. It starts by searching for any potential emitters on the gameObject already: 
 
@@ -150,8 +151,8 @@ The FindGameObjectInChildWithTag method is based on [THIS](https://answers.unity
 public static GameObject FindGameObjectInChildWithTag (GameObject parent, string tag){
   Transform t = parent.transform;
   for (int i = 0; i < t.childCount; i++) {
-  Debug.Log("Found first child. " + t.GetChild(i));
-  Debug.Log("Child has the tag: " + t.GetChild(i).tag);
+    Debug.Log("Found first child. " + t.GetChild(i));
+    Debug.Log("Child has the tag: " + t.GetChild(i).tag);
     if(t.GetChild(i).gameObject.tag == tag){
       Debug.Log("Found: " + t.GetChild(i).gameObject.name);
       return t.GetChild(i).gameObject;
@@ -171,17 +172,21 @@ if(emitter){
   Debug.Log("found an emitter. destroying it.");
   Destroy(emitter);
 } else {
-  Debug.Log("Error: No emitter found.");
-  GameObject particles = Instantiate(particleEffect, editableObject.transform);
-  particles.tag = "particle";
+  Debug.Log("No emitter found. Creating a new one on: " + editableObject);
+  var attachedEffect = particleEffect;
+  var particle = Instantiate(attachedEffect, editableObject.transform);
+  particle.tag = "particle";
 }
 ```
 
-If we found an emitter on the editableObject, we destroy it, which will stop the particle effects. Otherwise, we add a particle emitter to the gameobject, and tag it as "particle", which will allow the emitter to be found by FindGameObjectInChildWithTag() method. 
+If we found an emitter on the editableObject, we destroy it, which will stop the particle effects. Otherwise, we Instantiate a child-gameobject to the editableobject, and tag it as "particle", which will allow the emitter to be found by FindGameObjectInChildWithTag() method. 
 
 To see a video of this in action, please see [HERE.](https://youtu.be/lSrOE4lnVjA)
 
 Seperate link: https://youtu.be/lSrOE4lnVjA
+
+
+### Other neat additions. 
 
 ## Conclusion
 
