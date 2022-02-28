@@ -1,12 +1,15 @@
 # Assignment 4 - Interaction techniques (graded)
 
-**Date**: [TODO: date]
+**Date**: 28-02-2022
 
-**Group members participating**: [TODO: insert names]
+**Group members participating**: 
+Oliver M. Benee Petersen: Implementing Exercise 1, and 2. Writing main report content. 
+Thorben C. Schmidt: Fixing handin report images, solved issues with materials not changing. 
 
 **Activity duration**: 
 - About 18 hours on Exercise 1. 
-- About 40 hours on Exercise 2. 
+- About 50 hours on Exercise 2. 
+- About 6 more hours on fixing everything as various parts kept breaking over and over, and writing the report. 
 
 These are estimates, i forgot to keep track of the time. 
 
@@ -33,7 +36,16 @@ To solve this problem, we first start by considering the potential menu options.
 ![MENUOFF](https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/menuoff.png)
 ![MENUON](https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/menuon.png)
 
-The menu is activated through the three-lines button seen on the image with the menu off. It runs a method openMenu() which enables the menu. 
+Later on, we improved the menu, by changing the visuals to be appropriate to a landscape mode, as well as fitting the scrollbar neatly on top of the catalog.
+
+![IMPROVEDMENU](https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/Screenshot_20220228-003614_AR22.jpg)
+![IMPROVEDMENUOFF](https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/Screenshot_20220228-003608_AR22.jpg)
+
+The menu also works in landscape mode. 
+
+![ROTATEDIMPROVEDMENU](https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/Screenshot_20220228-023534_AR22.jpg)
+
+We now further discuss the practical implementation of this. The menu is activated through the three-lines button seen on the image with the menu off. It runs a method openMenu() which enables the menu. 
 
 ```
 void openMenu(){
@@ -54,7 +66,7 @@ This solves the menu background, but now we need to populate the menu with conte
 
 ![BUTTONOBJECTS](https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/buttonexamplewithmanager.PNG)
 
-When a menu option is pressed, we trigger a MenuButtonManager:
+When a menu option is pressed, we trigger a MenuButtonManager, which selects the associated gameobject, and closes the menu:
 
 ```
 public GameObject artifact;
@@ -62,6 +74,8 @@ public GameObject artifact;
 void selectObject(){
     DataHandler.Instance.artifact = artifact;
     Debug.Log("ARTIFACT: " + artifact.name);
+    // This line disables the menu. 
+    this.gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject.SetActive(false);
 }
 ```
 
@@ -103,7 +117,7 @@ After the menu has been closed, the user can place and edit gameobjects the same
 
 This now fulfills the requirements of allowing multiple objects to be placed by having a menu pop up from the bottom with a list of all available gameobjects to place. Given that the list can be infitetely expanded and scrolled in, it allows handling of "a lot" of objects. 
 
-To see a video demonstrating the final result, click [HERE.](https://youtu.be/Lztn7zc0sDE)
+To see a video demonstrating the result, click [HERE.](https://youtu.be/Lztn7zc0sDE)
 
 Seperate link: https://youtu.be/Lztn7zc0sDE
 
@@ -165,12 +179,13 @@ if(emitter){
 
 If we found an emitter on the editableObject, we destroy it, which will stop the particle effects. Otherwise, we add a particle emitter to the gameobject, and tag it as "particle", which will allow the emitter to be found by FindGameObjectInChildWithTag() method. 
 
-To see a video of this in action, please see HERE: 
+To see a video of this in action, please see [HERE.](https://youtu.be/lSrOE4lnVjA)
 
-[TODO: results for this weeks exercises]
+Seperate link: https://youtu.be/lSrOE4lnVjA
 
 ## Conclusion
-[TODO: conclusions of this weeks exercises]
+
+We have now successfully expanded our application to not only allow for adding multiple objects, but also 
 
 ## References
 [TODO: used references]
