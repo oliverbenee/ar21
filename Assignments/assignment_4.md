@@ -11,7 +11,7 @@ Thorben C. Schmidt: Fixing handin report images, solved issues with materials no
 - About 50 hours on Exercise 2. 
 - About 6 more hours on fixing everything as various parts kept breaking over and over, and writing the report. 
 
-These are estimates, i forgot to keep track of the time. 
+These are estimates, i forgot to keep track of the time.  ~74 hours. 
 
 ## Goal
 Formulate the new project idea. Implement object catalogue and assignment 4.
