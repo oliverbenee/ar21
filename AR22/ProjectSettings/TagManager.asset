@@ -10,6 +10,7 @@ TagManager:
   - selectable
   - emitter
   - particle
+  - physicalObject
   layers:
   - Default
   - TransparentFX

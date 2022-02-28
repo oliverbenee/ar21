@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class RealObjectAdder : MonoBehaviour
 {
@@ -19,11 +20,13 @@ public class RealObjectAdder : MonoBehaviour
     [SerializeField] private Button styleButton;
     [SerializeField] private GameObject styleCanvas;
 
+    [SerializeField] private Material mate;
     //List of gameobjects used for delete function.
     private List<GameObject> objects = new List<GameObject>();
 
     //GameObject selected for editing. PreviousObject is used to disable the outline, and to deselct an object.
     private GameObject editableObject;
+    private GameObject shellObject;
     [SerializeField]
     private GameObject particleEffect;
     // Start is called before the first frame update
@@ -42,15 +45,16 @@ public class RealObjectAdder : MonoBehaviour
         styleButton.onClick.AddListener(openMaterialMenu);
     }
 
-    bool touchMutex;
+    bool touchMutex, isMenuOpen;
     Vector2 touch1, touch2, D1;
     float oldAngle;
     // Update is called once per frame
     void Update(){
         if(useCursor){UpdateCursor();}
         // Checks if a placed gameobject is pressed. This is the activation thing. 
-        if(Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began){
-            Debug.Log("PRESSSS");
+        if(Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began && !isMenuOpen && !isPointerOverUI(Input.GetTouch(0))){
+            Debug.Log("ARE WE HITTING A MENU? " + isPointerOverUI(Input.GetTouch(0)));
+
             // register when an object is pressed.
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -72,6 +76,7 @@ public class RealObjectAdder : MonoBehaviour
                     c = hitObject.GetComponentsInChildren<Outline>();
                     foreach(Outline ol in c){ol.enabled = false;}
                     editableObject = new GameObject();
+                    shellObject = new GameObject();
                     editableObject.AddComponent<Outline>(); // This prevents am error when not hitting an object, and no object is being edited.
                     isEditing(false);
                 } else { // Not the same object. editableObject != hitObject.
@@ -82,6 +87,7 @@ public class RealObjectAdder : MonoBehaviour
                         var c = editableObject.GetComponentsInChildren<Outline>();
                         foreach(Outline ol in c){ol.enabled = false;}
                         editableObject = hitObject;
+                        shellObject = hit.collider.gameObject;
                         c = hitObject.GetComponentsInChildren<Outline>();
                         foreach(Outline ol in c){ol.enabled = true;}
                         isEditing(true);
@@ -102,7 +108,7 @@ public class RealObjectAdder : MonoBehaviour
         }
 
         // Checks if a gameobject is dragged. This should drag the object. It will drag exactly to where you are pointing. 
-        if(Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved){
+        if(Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved && !isPointerOverUI(Input.GetTouch(0))){
             Debug.Log("PREPARE DRAGGING SUCKASS");
             if(editableObject.name != "AR Default Plane" && editableObject.name != "Trackables"){
                 Debug.Log("DRAGGGGGGG " + editableObject.name);
@@ -119,7 +125,8 @@ public class RealObjectAdder : MonoBehaviour
 
 
                 var y = editableObject.transform.position.y;
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);                
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);       
+                Debug.DrawRay(ray.origin, ray.direction, Color.yellow);         
                 RaycastHit hit;
                 if(Physics.Raycast(ray, out hit)) { 
                     if(hit.collider.gameObject.layer != LayerMask.NameToLayer("artifact_layer")){
@@ -132,8 +139,6 @@ public class RealObjectAdder : MonoBehaviour
                         } else {
                             Debug.Log("Tried to move: " + editableObject.name + " to (0.9, -1.0, 1.9)");
                         }
-                    } else {
-                        Debug.Log("hit the artifact layer.");
                     }
                 } else {
                     Debug.Log("Raycast hit nothing. No movement.");
@@ -145,7 +150,7 @@ public class RealObjectAdder : MonoBehaviour
 
         // Checks if a gameobject is rotated. This should rotate the object.
         // https://stackoverflow.com/questions/32634791/calculate-touch-rotation-angle-with-two-fingers
-        if(Input.touchCount == 2){
+        if(Input.touchCount == 2 && !isPointerOverUI(Input.GetTouch(0))){
             Debug.Log("Rotate");
             if(touchMutex == false){
                 touch1 = Input.GetTouch(0).position;
@@ -188,7 +193,7 @@ public class RealObjectAdder : MonoBehaviour
     // Sets a gameobject as inactive. 
     void deleteObject(){
         Debug.Log("DEDEDELETE THIS");
-        if(editableObject != null && editableObject.name != "AR Default Plane"){
+        if(editableObject != null && editableObject.name != "AR Default Plane" && editableObject.name != "Trackables"){
             Debug.Log("Deleting object: " + editableObject.name);
             Destroy(FindGameObjectInChildWithTag(editableObject, "particle"));
             editableObject.SetActive(false);
@@ -229,6 +234,7 @@ public class RealObjectAdder : MonoBehaviour
         outline.OutlineWidth = 5f; // 5f is good for scale 0.2
         outline.enabled = false;
 
+        /*
         // // Add particle effect element. We have to add the local variable here, because otherwise it attaches the prefab field
         // // and bad things happen (TM);
         // var attachedEffect = particleEffect;
@@ -236,17 +242,20 @@ public class RealObjectAdder : MonoBehaviour
         // particle.tag = "particle";
         // particle.SetActive(false);
         // objects.Add(particle); // Lets us delete it later.
+        */
     }
 
     // When requested by a button press, destroy all objects.
     void deleteAllObjects(){
         Debug.Log("call deleteobjects");
         // Iterate through list and hide those objects.
-        foreach(GameObject u in objects) {
-            objects.Remove(u);
-            Destroy(u);
+        while(objects.Count != 0){
+            foreach(GameObject u in objects) {
+                objects.Remove(u);
+                Destroy(u);
+            }
+            objects.Clear();
         }
-        objects.Clear();
         isEditing(false);
     }
 
@@ -310,10 +319,48 @@ public class RealObjectAdder : MonoBehaviour
     // Open the material catalog.
     void openMaterialMenu(){
         styleCanvas.SetActive(true);
+        isMenuOpen = true;
         Debug.Log("MENUUUUU");
     }
 
-    public static void changeMaterial(){
-        editableObject.GetComponent<Renderer>().material = DataHandler.Instance.material;
+    public void changeMaterial(){
+        Debug.Log("CHANGING MATEIRALS.");
+        mate = DataHandler.Instance.material;
+        GameObject toBeChanged = FindGameObjectInChildWithTag(shellObject, "physicalObject");
+        if(shellObject.name != "AR Default Plane" || shellObject.name != "New Game Object"){
+            Debug.Log("CHANGING MATERIALS OF: " + shellObject.name);
+            List<MeshRenderer> rendererList = new List<MeshRenderer>();
+            foreach (MeshRenderer objectRenderer in shellObject.GetComponentsInChildren<MeshRenderer>()) {
+                if(objectRenderer.name != "ARPlane"){
+                    Debug.Log("DADADADADADAD: " + objectRenderer.transform.parent.gameObject.name);
+                    objectRenderer.material = mate;
+                    objectRenderer.sharedMaterial = mate;
+                    objectRenderer.materials = new Material[1] {mate};
+                    objectRenderer.sharedMaterials = new Material[1] {mate};
+                } else {
+                    Debug.Log("Error: Tried to change the color of the plane.");
+                }
+            }
+        } else {
+            Debug.Log("Error: Tried to change color of the plane.");
+        }
+    }
+
+    public void closeMenu(){
+        isMenuOpen = false;
+        Debug.Log("Closing menu. Changing materials.");
+        changeMaterial();
+        
+        // Re-enable outline since you pressed somewhere to add a material. 
+        var outline = editableObject.GetComponent<Outline>().enabled = true;
+    }
+
+    // SOURCE: youtube.com/watch=v=A7woL0oZCnA&t=523
+    public bool isPointerOverUI(Touch touch){
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = new Vector2(touch.position.x, touch.position.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData,results);
+        return results.Count > 0;
     }
 }
