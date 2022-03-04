@@ -18,7 +18,7 @@ For our first interaction technique, we intend to let the user to create general
 
 ### Technique 2 - Watch your step [Proximity, animate]
 
-For the second interaction, we want to solidify the value and care, that is needed for ancient artifacts by implementing a system, that lets users knock the placed artifacts over when a user walks into them. We intend to implement this by measuring the relation in the form of the distance between the user and an artifact, and if the two are too close, we want to knock down the vase onto the ground. 
+For the second interaction, we want to solidify the value and fragility, that is inherent to ancient artifacts by implementing a system, that breaks the placed artifacts when a user walks into them. We intend to implement this by measuring the relation in the form of the distance between the user and an artifact, and if the two are too close, the vase will break apart. 
 [TODO: description]
 
 ### Technique 3 - Polishing [Gesture, Appearance]
