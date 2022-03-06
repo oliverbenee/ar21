@@ -5,6 +5,10 @@
 **Group members participating**: Oliver Benée Petersen, Thorben Christopher Schmidt
 
 **Activity duration**: [TODO: Insert hours spend]
+Friday 04.03.2022: 6 hours
+saturday 05.03.2022: 12 hours
+Sunday 06.03.2022: 
+
 
 ## Goal
 We intend to implement the following three interaction techniques:
@@ -19,12 +23,10 @@ For our first interaction technique, we intend to let the user to create general
 ### Technique 2 - Watch your step [Proximity, animate]
 
 For the second interaction, we want to solidify the value and fragility, that is inherent to ancient artifacts by implementing a system, that breaks the placed artifacts when a user walks into them. We intend to implement this by measuring the relation in the form of the distance between the user and an artifact, and if the two are too close, the vase will break apart. 
-[TODO: description]
 
 ### Technique 3 - Polishing [Gesture, Appearance]
 
 The third technique, we intend to implement the ability for users to polish placed artifacts by scrubbing a selected object with their finger. The scrubbing of the artifact is intended to simulate rubbing the artifact with a piece of cloth or other polishing device. This way, the user will be able to gesture at a selected object to polish it.
-[TODO: description]
 
 ## Plan
 [TODO: plan of this weeks exercises]
@@ -39,7 +41,47 @@ The third technique, we intend to implement the ability for users to polish plac
 [TODO: description]
 
 ### Technique 2 - [TODO: Name]
-[TODO: description]
+To achieve this, we first needed a new model, since breaking apart an object in unity is best done by replacing the object with another that looks the same but is split up to fall apart. We did this by taking our Amphora model and it's textures into Blender, and first using the 'solidify' function, so the vase model is hollow, and then running 'cell fracture' to create the shards. The result of that is seen below.
+
+<img src="https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/Broken_Amphora_Model.png" height="360" />
+
+We then importet this into unity and set it up as a prefab, where we could adress and edit each shard as their own prefab.
+
+We create variables 
+
+<img src="https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/technique_2.gif" height="420" />
+
+
+```c#
+//broken vase prefab
+    public GameObject brokenVase;
+    public GameObject shatterPhysicsPlane;
+```
+
+```c#
+//Checking whether the camera is colliding with something
+        Vector3 screenmiddle = new Vector3(539,1259,0);
+        Ray breakRay = Camera.main.ScreenPointToRay(screenmiddle);
+        RaycastHit breakHit;
+        if(Physics.Raycast(breakRay, out breakHit)){
+            if(breakHit.distance < 0.1){
+                GameObject breakHitObject = breakHit.collider.gameObject.transform.parent.gameObject;
+                if(breakHitObject != null && breakHitObject.name != "AR Default Plane" && breakHitObject.name != "Trackables"){
+                    
+                    Instantiate(brokenVase, breakHitObject.transform.position, breakHitObject.transform.rotation);
+                    Instantiate(shatterPhysicsPlane, breakHitObject.transform.position + new Vector3(0,-1,0), breakHitObject.transform.rotation);
+                    //Removes object
+                    Destroy(breakHitObject);
+                    Debug.Log("Bonked " + breakHitObject);
+                }
+            }
+        }
+```
+
+
+
+
+
 
 ### Technique 3 - Polishing [Gesture, Appearance]
 Since Polishing a vase would have similar movement to moving a vase, we want to switch between the two, to avoid conflicts when the user is trying to do a specific action. To achieve this, we first created a button, called 'switchPolishingModeButton', a boolean polishingModeOn, and a method that the button would call, which flips the boolean and depending on the current state, changes the icon of the button. 
