@@ -10,7 +10,7 @@ Friday 04.03.2022: 6 hours
 
 saturday 05.03.2022: 12 hours
 
-Sunday 06.03.2022: 11 hours
+Sunday 06.03.2022: 11 hours + 3 more hours waiting for gitlab to work again. Convenient timing. 
 
 
 ## Goal
@@ -20,17 +20,15 @@ We intend to implement the following three interaction techniques:
 
 For our first interaction technique, we intend to let the user to create general themes in their rooms using marker interaction. We want to let the user print out XR markers representative of a desired theme, and have the user tie placed artifacts to the marker. Any artifact, that is moved to this marker should change to the same material as that of the marker. Thus, the new object will fit the theme, that the user has decided for the area of the marker.  
 
-To implement this feature, we intend to use XR marker interaction to allow users to determine a theme for their room. When the marker is registered by the user, the artifacts surrounding them should change their appearance in response to the marker they have placed on the ground. Thus, we register the themes to predefined markers, that can be used to change the appearance of surrounding objects to the user. We argue, that the use of markers to track the theme location of the area fulfills the criterias of using tracked image marker interaction; and the use of material changes fulfills the criteria of changing the appearance of the gameobject. The materials, we will be using includes the following:
+To solve this problem, we intend to use XR marker interaction to allow users to determine a theme for their room. When the marker is registered by the user, the artifacts surrounding them should change their appearance in response to the marker they have placed on the ground. Thus, we register the themes to predefined markers, that can be used to change the appearance of surrounding objects to the user. We argue, that the use of markers to track the theme location of the area fulfills the criterias of using tracked image marker interaction; and the use of material changes fulfills the criteria of changing the appearance of the gameobject. The materials, we will be using includes the following:
 
 | Volute Krater | Amphora | Hydria |
 | ------ | ------ | ------ |
 | <img src="https://gitlab.au.dk/au598997/ar21/-/raw/main/AR22/Assets/Prefabs/Nokobot/GreekTemple%20-%20Vases%20(Free)/04_Textures/Vases/Vase_Amphora_AlbedoTransparency.png" /> | <img src="https://gitlab.au.dk/au598997/ar21/-/raw/main/AR22/Assets/Prefabs/Nokobot/GreekTemple%20-%20Vases%20(Free)/04_Textures/Vases/Vase_Hydria_AlbedoTransparency.png" /> | <img src="https://gitlab.au.dk/au598997/ar21/-/raw/main/AR22/Assets/Prefabs/Nokobot/GreekTemple%20-%20Vases%20(Free)/04_Textures/Vases/Vase_VoluteKrater_AlbedoTransparency.png" /> |
 
+### Technique 2 - Watch your step [Proximity, Animation]
 
-### Technique 2 - Watch your step [Proximity, animate]
-
-For the second interaction, we want to solidify the value and fragility, that is inherent to ancient artifacts. To do this, we want to implement a system, that breaks the placed artifacts when a user walks into them. Thus, if the user bumps into vases, they will be knocked over and destroyed. 
-We intend to implement this by measuring the relation in the form of the proximity between the user and an artifact. If the two are too close, the user will knock over the vase, and it will break apart. As for the animation, we intend to simulate the destruction of the artifact using rigid body animations, as these can be generated dynamically. We argue, that this will improve the user experience, as we now can create dynamically changing destruction animations. 
+For the second interaction, we want to solidify the value and fragility, that is inherent to ancient artifacts. To simulate this feeling, we want to implement a system, that breaks the placed artifacts when a user walks into them. Thus, if the user bumps into vases, they will be knocked over and destroyed. We intend to implement this by measuring the relation in the form of the proximity between the user and an artifact. If the two are too close, the user will knock over the vase, and it will break apart. This can be accomplished by raycasting within a short range. As for the animation, we intend to simulate the destruction of the artifact using rigid body animations, as these can be generated dynamically. We argue, that this will improve the user experience, as we now can create dynamically changing destruction animations. 
 
 ### Technique 3 - Polishing [Gesture, Appearance]
 
@@ -44,9 +42,9 @@ For the implementation of these interaction techniques, we expect that the most 
 
 ## Results
 
-In the following section, we will discuss the implementation and results of the creation of the interaction techniques. 
+In the following section, we will discuss the implementation and results of the creation of the interaction techniques. We will discuss the implementation of these individually as they pertain to each technique.
 
-### Technique 1 - Theme plates. [Marker, Appearance]
+### Technique 1 - Theme plates.
  
 To implement the feeling of a marker being representative of a room, we are going to implement a marker interaction, where users can place the marker in the middle of the room, and have nearby artifacts be rendered as a color nearby. However, since rendering entire rooms is going to be performance intensive, we are going to let theme markers create a field around them, where all objects inside will change to the theme on the plate. This way, we don't have to generate a model of the room in the program, which would be performance intensive not only to save, but also to maintain. 
 
@@ -139,27 +137,24 @@ foreach (MeshRenderer objectRenderer in item.transform.gameObject.GetComponentsI
 }
 ```
 
-To see the results of this implementation, please see the video
+To see the results of this implementation, please see the video [HERE.](https://www.tutorialsandyou.com/markdown/ 'Please see the video I spent a lot of time on it')
 
 [![IMAGE ALT TEXT](http://img.youtube.com/vi/_6v-6kp6raQ/0.jpg)](http://www.youtube.com/watch?v=_6v-6kp6raQ "Demo video")
 
- [HERE.](https://www.tutorialsandyou.com/markdown/ 'Please see the video I spent a lot of time on it')
+### Technique 2 - Watch your step
 
-### Technique 2 - [TODO: Name]
-To achieve this, we first needed a new model, since breaking apart an object in unity is best done by replacing the object with another that looks the same but is split up to fall apart. We did this by taking our Amphora model and it's textures into Blender, and first using the 'solidify' function, so the vase model is hollow, and then running 'cell fracture' to create the shards. The result of that is seen below.
+To implement the ability to knock over placed artifacts and have them be destroyed, we need to create a shattered vase, which can then fall. To achieve this, we first needed a new model that can be broken apart, since breaking apart an object in unity is best done by replacing the object with another that looks the same but is split up to fall apart. This is because it is less performance intensive to instantiate a fixed prefab compared to generating a new one with the changes to be made. We did this by taking our Amphora model and its textures into Blender, and first using the 'solidify' function, so the vase model is hollow, and then running 'cell fracture' to create the shards. The resulting model can be seen below. 
 
 <img src="https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/Broken_Amphora_Model.png" height="360" />
 
-We then importet this into unity and set it up as a prefab, where we could adress and edit each shard as their own prefab.
-
-We create variables for our broken vase prefab and a new invisible plane that the vase can fall apart onto.
+After creating this model, we can now import it into unity, and set it up as a prefab, where each shard of the broken vase is a child object of the parent gameobject, which is "the entire vase". We can now start coding the shattering physics. First, we create variables for our broken vase prefab and a new invisible plane that the vase can fall apart onto.
 
 ```c#
 //broken vase prefab
     public GameObject brokenVase;
     public GameObject shatterPhysicsPlane;
 ```
-Then, using raycast to cast a ray from the middle of the screen, and a check on the distance of the objects hit by the ray. We then check if that object is not null, not an AR default plane, and not a trackable either. This ensures that this code is only run when we actually 'bump' the phone into the vase. Once the phone is close enough to the vase, we spawn the broken vase prefab, and the invisible plane under it, and then destroy the original vase GameObject.
+Now that we have the two objects, that need to interact, we now need a trigger for the interaction. To simulate the feeling of the user walking into the object to knock them over, we use raycast to cast a ray from the middle of the screen, and a check on the distance of the objects hit by the ray. We then check if that object is not null, not an AR default plane, and not a trackable either. This ensures that this code is only run when we actually 'bump' the phone into the vase. Once the phone is close enough to the vase, we instantiate the broken vase prefab and its invisible plane, and then destroy the original vase GameObject. This effectively replaces the old vase with the broken one. 
 
 ```c#
 //Checking whether the camera is colliding with something
@@ -181,14 +176,16 @@ Then, using raycast to cast a ray from the middle of the screen, and a check on 
         }
 ```
 
-The broken vase and plane both have rigid bodies and mesh colliders. The plane is fixed in place. This then leads to the result below.
+Now that the vase has been instantiated, we can simulate the physics of the vase. Since it will not be used for raycasting, we can add a rigid body to the vase to simulate the vase falling to the ground and being destroyed. For reference, see the image below:
+
+<img src="https://gitlab.au.dk/au598997/ar21/-/raw/a3048382722c9d25aa4810d8c55f3592935c32e6/Images/collider_and_body.PNG"/>
+
+In addition to the rigid body, we add a mesh collider to ensure, that the vase will be stopped by the plane and not fall through it. Below the object, we spawn a fixed temporary plane with a mesh collider, which allows the vase to not fall through the ground. Using this approach, we get the result seen in the GIF below. This then leads to the result below.
 
 <img src="https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/technique_2.gif" height="420" />
 
 
-
-
-### Technique 3 - Polishing [Gesture, Appearance]
+### Technique 3 - Polishing
 Since Polishing a vase would have similar movement to moving a vase, we want to switch between the two, to avoid conflicts when the user is trying to do a specific action. To achieve this, we first created a button, called 'switchPolishingModeButton', a boolean polishingModeOn, and a method that the button would call, which flips the boolean and depending on the current state, changes the icon of the button. 
 
 <img src="https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/gem.png" height="60" />
