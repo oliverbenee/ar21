@@ -4,13 +4,13 @@
 
 **Group members participating**: Oliver Benée Petersen, Thorben Christopher Schmidt
 
-**Activity duration**: [TODO: Insert hours spend]
+**Activity duration**: 30 hours
 
 Friday 04.03.2022: 6 hours
 
 saturday 05.03.2022: 12 hours
 
-Sunday 06.03.2022: 
+Sunday 06.03.2022: 11 hours
 
 
 ## Goal
@@ -20,29 +20,33 @@ We intend to implement the following three interaction techniques:
 
 For our first interaction technique, we intend to let the user to create general themes in their rooms using marker interaction. We want to let the user print out XR markers representative of a desired theme, and have the user tie placed artifacts to the marker. Any artifact, that is moved to this marker should change to the same material as that of the marker. Thus, the new object will fit the theme, that the user has decided for the area of the marker.  
 
-We argue, that this approach fulfills the criteria of using tracked image marker interaction for the detection of the theme plates, and changing the appearance of an object by changing the surface material of the artifact. 
+To implement this feature, we intend to use XR marker interaction to allow users to determine a theme for their room. When the marker is registered by the user, the artifacts surrounding them should change their appearance in response to the marker they have placed on the ground. Thus, we register the themes to predefined markers, that can be used to change the appearance of surrounding objects to the user. We argue, that the use of markers to track the theme location of the area fulfills the criterias of using tracked image marker interaction; and the use of material changes fulfills the criteria of changing the appearance of the gameobject. The materials, we will be using includes the following:
 
-### Technique 2 - Watch your step [Relation, Animation]
+| Volute Krater | Amphora | Hydria |
+| ------ | ------ | ------ |
+| <img src="https://gitlab.au.dk/au598997/ar21/-/raw/main/AR22/Assets/Prefabs/Nokobot/GreekTemple%20-%20Vases%20(Free)/04_Textures/Vases/Vase_Amphora_AlbedoTransparency.png" /> | <img src="https://gitlab.au.dk/au598997/ar21/-/raw/main/AR22/Assets/Prefabs/Nokobot/GreekTemple%20-%20Vases%20(Free)/04_Textures/Vases/Vase_Hydria_AlbedoTransparency.png" /> | <img src="https://gitlab.au.dk/au598997/ar21/-/raw/main/AR22/Assets/Prefabs/Nokobot/GreekTemple%20-%20Vases%20(Free)/04_Textures/Vases/Vase_VoluteKrater_AlbedoTransparency.png" /> |
 
-For the second interaction, we want to solidify the value and fragility, that is inherent to ancient artifacts by implementing a system, that breaks the placed artifacts when a user walks into them. We intend to implement this by measuring the relation in the form of the distance between the user and an artifact, and if the two are too close, the vase will break apart. 
 
-We argue, that this approach fulfills the criteria of using the relation between the user, and the placed artifact, as the artifact can only be destroyed, when the two are close. For the breakage, we argue that the use of rigidbodies to make the object fall apart fulfills the critera of animating a gameobject in response to user interaction.
+### Technique 2 - Watch your step [Proximity, animate]
+
+For the second interaction, we want to solidify the value and fragility, that is inherent to ancient artifacts. To do this, we want to implement a system, that breaks the placed artifacts when a user walks into them. Thus, if the user bumps into vases, they will be knocked over and destroyed. 
+We intend to implement this by measuring the relation in the form of the proximity between the user and an artifact. If the two are too close, the user will knock over the vase, and it will break apart. As for the animation, we intend to simulate the destruction of the artifact using rigid body animations, as these can be generated dynamically. We argue, that this will improve the user experience, as we now can create dynamically changing destruction animations. 
 
 ### Technique 3 - Polishing [Gesture, Appearance]
 
-The third technique, we intend to implement the ability for users to polish placed artifacts by scrubbing a selected object with their finger. The scrubbing of the artifact is intended to simulate rubbing the artifact with a piece of cloth or other polishing device. This way, the user will be able to gesture at a selected object to polish it.
+The third technique, we intend to implement the ability for users to polish placed artifacts by scrubbing a selected object with their finger. The scrubbing of the artifact is intended to simulate rubbing the artifact with a piece of cloth or other polishing device. This way, the user will be able to gesture at a selected object to polish it. We argue, that the use of rubbing as a gesture is appropriate, as it helps solidify, that the "dirtiness" of the artifact must be rubbed away to improve the appearance of the artifact. 
 
-We argue, that the use of dragging back and forth acts as a gesture simulating rubbing on the artifact. By polishing the artifact, we want to make it shiny and prettier, thus improving the appearance of the object. 
+To implement this feature, we intend to register the rubbing touch gesture, and use raycast to measure which gameobject is being polished. As the user is polishing the artifact, we intend "shine up" the artifact by brightening up its material and making it more shiny. 
 
 ## Plan
 
-For the implementation of the three interaction techniques, we will both be working to implement the polishing technique. Afterwards, Oliver will be focusing on the implementation of the theme plates for marker interaction, as well as writing the report, while Thorben will focus on implementing the artifact breakage of technique 2.
+For the implementation of these interaction techniques, we expect that the most demanding technique to implement will be the first. Thus, we will split up the workload, so that Oliver will focus on the implementation of the XR plate tracking, while Thorben will first focus on implementing the polishing feature, as this will help get work done fast. Once one technique is completed, the one who completed it will move on to work on the second technique, hopefully ending up with both of us working on it. 
 
 ## Results
 
-For each of the techniques, we will now discuss their intended functionality further, a plan of implementation, as well as the coding of this feature in unity. 
+In the following section, we will discuss the implementation and results of the creation of the interaction techniques. 
 
-### Technique 1 - Theme plates.  
+### Technique 1 - Theme plates. [Marker, Appearance]
  
 To implement the feeling of a marker being representative of a room, we are going to implement a marker interaction, where users can place the marker in the middle of the room, and have nearby artifacts be rendered as a color nearby. However, since rendering entire rooms is going to be performance intensive, we are going to let theme markers create a field around them, where all objects inside will change to the theme on the plate. This way, we don't have to generate a model of the room in the program, which would be performance intensive not only to save, but also to maintain. 
 
