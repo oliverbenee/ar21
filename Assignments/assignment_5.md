@@ -133,7 +133,11 @@ foreach (MeshRenderer objectRenderer in item.transform.gameObject.GetComponentsI
 }
 ```
 
-To see the results of this implementation, please see the video [HERE.](https://www.tutorialsandyou.com/markdown/ 'Please see the video I spent a lot of time on it')
+To see the results of this implementation, please see the video
+
+[![IMAGE ALT TEXT](http://img.youtube.com/vi/_6v-6kp6raQ/0.jpg)](http://www.youtube.com/watch?v=_6v-6kp6raQ "Demo video")
+
+ [HERE.](https://www.tutorialsandyou.com/markdown/ 'Please see the video I spent a lot of time on it')
 
 ### Technique 2 - [TODO: Name]
 To achieve this, we first needed a new model, since breaking apart an object in unity is best done by replacing the object with another that looks the same but is split up to fall apart. We did this by taking our Amphora model and it's textures into Blender, and first using the 'solidify' function, so the vase model is hollow, and then running 'cell fracture' to create the shards. The result of that is seen below.
