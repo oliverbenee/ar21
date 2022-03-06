@@ -33,6 +33,10 @@ public class RealObjectAdder : MonoBehaviour
     private bool polishingModeOn;
     [SerializeField]
     private GameObject particleEffect;
+
+    //broken vase prefab
+    public GameObject brokenVase;
+    public GameObject shatterPhysicsPlane;
     // Start is called before the first frame update
     void Start()
     {
@@ -56,6 +60,29 @@ public class RealObjectAdder : MonoBehaviour
     // Update is called once per frame
     void Update(){
         if(useCursor){UpdateCursor();}
+        
+
+        //Checking whether the camera is colliding with something
+        Vector3 screenmiddle = new Vector3(539,1259,0);
+        Ray breakRay = Camera.main.ScreenPointToRay(screenmiddle);
+        RaycastHit breakHit;
+        if(Physics.Raycast(breakRay, out breakHit)){
+            if(breakHit.distance < 0.1){
+                GameObject breakHitObject = breakHit.collider.gameObject.transform.parent.gameObject;
+                if(breakHitObject != null && breakHitObject.name != "AR Default Plane" && breakHitObject.name != "Trackables"){
+                    
+                    Instantiate(brokenVase, breakHitObject.transform.position, breakHitObject.transform.rotation);
+                    Instantiate(shatterPhysicsPlane, breakHitObject.transform.position + new Vector3(0,-1,0), breakHitObject.transform.rotation);
+                    //Removes object
+                    Destroy(breakHitObject);
+                    Debug.Log("Bonked " + breakHitObject);
+                }
+            }
+        }
+
+
+
+
         // Checks if a placed gameobject is pressed. This is the activation thing. 
         if(Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began && !isMenuOpen && !isPointerOverUI(Input.GetTouch(0))){
             Debug.Log("Manual log: ARE WE HITTING A MENU? " + isPointerOverUI(Input.GetTouch(0)));
@@ -244,15 +271,15 @@ public class RealObjectAdder : MonoBehaviour
         Vector3 position = transform.position; 
         Vector3 position2 = new Vector3(position.x, position.y, position.z);
         GameObject go = Instantiate(DataHandler.Instance.artifact, position2, transform.rotation);
+        
         objects.Add(go);
-
         // Add a hidden outline to the object.
         var outline = go.AddComponent<Outline>();
         outline.OutlineMode = Outline.Mode.OutlineAll;
         outline.OutlineColor = Color.yellow;
         outline.OutlineWidth = 5f; // 5f is good for scale 0.2
         outline.enabled = false;
-
+        
         /*
         // // Add particle effect element. We have to add the local variable here, because otherwise it attaches the prefab field
         // // and bad things happen (TM);

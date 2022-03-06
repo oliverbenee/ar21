@@ -11,6 +11,7 @@ TagManager:
   - emitter
   - particle
   - physicalObject
+  - BrokenPiece
   layers:
   - Default
   - TransparentFX
