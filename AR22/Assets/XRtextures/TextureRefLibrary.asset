@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848409ee8ba454f42a5ddff137688a27, type: 3}
+  m_Name: TextureRefLibrary
+  m_EditorClassIdentifier: 
+  m_GuidLow: 5236630322396043954
+  m_GuidHigh: 4141637933538395311
+  m_Images:
+  - m_SerializedGuid:
+      m_GuidLow: 5547894103626952216
+      m_GuidHigh: 17877313920864779695
+    m_SerializedTextureGuid:
+      m_GuidLow: 12791475359099885462
+      m_GuidHigh: 1196559530674981579
+    m_Size: {x: 0, y: 0}
+    m_SpecifySize: 0
+    m_Name: Amphora_Albedo
+    m_Texture: {fileID: 2800000, guid: 244f97967311b184cb8a7db28d089b10, type: 3}
+  - m_SerializedGuid:
+      m_GuidLow: 4711854839681270426
+      m_GuidHigh: 172596366865278901
+    m_SerializedTextureGuid:
+      m_GuidLow: 685771895988091761
+      m_GuidHigh: 2818052725903140795
+    m_Size: {x: 0, y: 0}
+    m_SpecifySize: 0
+    m_Name: VoluteKrater_Albedo
+    m_Texture: {fileID: 2800000, guid: f150fb7159e70984bb27c70506bc1b27, type: 3}
+  - m_SerializedGuid:
+      m_GuidLow: 5639109472797597760
+      m_GuidHigh: 6445375001608825759
+    m_SerializedTextureGuid:
+      m_GuidLow: 3216871372607181963
+      m_GuidHigh: 17131289054753615994
+    m_Size: {x: 0, y: 0}
+    m_SpecifySize: 0
+    m_Name: Hydria_Albedo
+    m_Texture: {fileID: 2800000, guid: 3c5fd48b9f782ca47a70203da190beed, type: 3}
+  - m_SerializedGuid:
+      m_GuidLow: 5432166250538521196
+      m_GuidHigh: 1237165880547478702
+    m_SerializedTextureGuid:
+      m_GuidLow: 12809493866972162858
+      m_GuidHigh: 7372285071046312776
+    m_Size: {x: 0, y: 0}
+    m_SpecifySize: 0
+    m_Name: Vase_Hydria_MetallicSmoothness
+    m_Texture: {fileID: 0}
+  - m_SerializedGuid:
+      m_GuidLow: 4944455493161271692
+      m_GuidHigh: 12591462876943803535
+    m_SerializedTextureGuid:
+      m_GuidLow: 13678703145801224186
+      m_GuidHigh: 2183904703653969608
+    m_Size: {x: 0, y: 0}
+    m_SpecifySize: 0
+    m_Name: Vase_Amphora_MetallicSmoothness
+    m_Texture: {fileID: 2800000, guid: c9800ffa8409bdd4c87e99d4c1c94e1e, type: 3}
+  - m_SerializedGuid:
+      m_GuidLow: 5731658732431894446
+      m_GuidHigh: 1377026171138370232
+    m_SerializedTextureGuid:
+      m_GuidLow: 3550213886645677383
+      m_GuidHigh: 7618665890480433835
+    m_Size: {x: 0, y: 0}
+    m_SpecifySize: 0
+    m_Name: Vase_VoluteKrater_MetallicSmoothness
+    m_Texture: {fileID: 0}

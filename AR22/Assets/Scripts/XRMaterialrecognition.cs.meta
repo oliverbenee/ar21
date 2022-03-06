@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e45920e7f9bf73545a28f6212e61d23c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - amphora: {fileID: 2100000, guid: 70cf5a841520a9b41b359afe174cb6ea, type: 2}
+  - hydria: {fileID: 2100000, guid: 41ec4744b7853e34a8dd2eed887464b8, type: 2}
+  - voluteKrater: {fileID: 2100000, guid: 3ef5354ebf67bd243a71a505a199801f, type: 2}
+  - mate: {fileID: 15303, guid: 0000000000000000f000000000000000, type: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
