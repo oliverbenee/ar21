@@ -61,11 +61,11 @@ public class XRMaterialrecognition : MonoBehaviour
                 mate = voluteKrater;
             }
 
-            // Find close gameobjects and set their materials. 
-            var closetsobjects = Physics.OverlapSphere(imageLocation, 10);
+            // Find close gameobjects and set their materials. Limit radius, and only use layer 6, which is the layer gameobjects are on.
+            var closetsobjects = Physics.OverlapSphere(imageLocation, 20);
             foreach (var item in closetsobjects){
-                bool isPlaneOrCam = !item.transform.gameObject.name.Contains("ARPlane") && !item.transform.gameObject.name.Contains("AR Camera");
-                if(!item.transform.gameObject.name.Contains("ARPlane")){
+                bool notPlaneOrCam = !item.transform.gameObject.name.Contains("Plane") && !item.transform.gameObject.name.Contains("Camera");
+                if(notPlaneOrCam){
                     Debug.Log("Found gameobject: " + item.transform.gameObject.name);
                     Debug.Log("Setting material to: " + mate.name);
 
@@ -81,13 +81,12 @@ public class XRMaterialrecognition : MonoBehaviour
                         if(objectRenderer.name != "ARPlane"){
                             Debug.Log("Manual log: DADADADADADAD: " + objectRenderer.transform.parent.gameObject.name);
                             objectRenderer.material = mate;
-                            objectRenderer.sharedMaterial = mate;
-                            objectRenderer.materials = new Material[1] {mate};
-                            objectRenderer.sharedMaterials = new Material[1] {mate};
                         } else {
                             Debug.Log("Manual log: Error: Tried to change the color of the plane.");
                         }
                     }
+                } else {
+                    Debug.Log("Error: Name is: " + item.transform.gameObject.name);
                 }
             }
                 

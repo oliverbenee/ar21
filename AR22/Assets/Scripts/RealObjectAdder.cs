@@ -71,7 +71,8 @@ public class RealObjectAdder : MonoBehaviour
                 GameObject breakHitObject = breakHit.collider.gameObject.transform.parent.gameObject;
                 if(breakHitObject != null && breakHitObject.name != "AR Default Plane" && breakHitObject.name != "Trackables"){
                     
-                    Instantiate(brokenVase, breakHitObject.transform.position, breakHitObject.transform.rotation);
+                    GameObject vase = Instantiate(brokenVase, breakHitObject.transform.position, breakHitObject.transform.rotation);
+                    objects.Add(vase);
                     Instantiate(shatterPhysicsPlane, breakHitObject.transform.position + new Vector3(0,-1,0), breakHitObject.transform.rotation);
                     //Removes object
                     Destroy(breakHitObject);
@@ -114,7 +115,7 @@ public class RealObjectAdder : MonoBehaviour
                 } else { // Not the same object. editableObject != hitObject.
                     // STATUS: 
                     Debug.Log("Manual log: New object selected");
-                    if(hitObject.name != "AR Default Plane" || hitObject.name != "ARPlane"){ // Hit a gameobject. Not the plane. 
+                    if(hitObject.name != "AR Default Plane" || hitObject.name != "ARPlane" || hitObject.name != "ARCursor"){ // Hit a gameobject. Not the plane. 
                         Debug.Log("Manual log: Hit: " + hitObject.name);
                         var c = editableObject.GetComponentsInChildren<Outline>();
                         foreach(Outline ol in c){ol.enabled = false;}

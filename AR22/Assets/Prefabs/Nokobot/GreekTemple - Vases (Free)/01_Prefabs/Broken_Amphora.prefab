@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2097370055428362433}
   - component: {fileID: 7921882223020547292}
   - component: {fileID: 5945776324992880373}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Amphora_cell.001_cell.001_cell.001
   m_TagString: BrokenPiece
   m_Icon: {fileID: 0}
@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 6855533173906778778}
   - component: {fileID: 169018166334865204}
   - component: {fileID: 6765406575941141663}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Amphora_cell_cell.001
   m_TagString: BrokenPiece
   m_Icon: {fileID: 0}
@@ -239,7 +239,7 @@ GameObject:
   - component: {fileID: 136775305806579852}
   - component: {fileID: 4701265215992070262}
   - component: {fileID: 6244291067581709266}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Amphora_cell.002
   m_TagString: BrokenPiece
   m_Icon: {fileID: 0}
@@ -352,7 +352,7 @@ GameObject:
   - component: {fileID: 7111354690795953426}
   - component: {fileID: 505864754721540582}
   - component: {fileID: 7917267214513108454}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Amphora_cell.001_cell.001_cell
   m_TagString: BrokenPiece
   m_Icon: {fileID: 0}
@@ -465,7 +465,7 @@ GameObject:
   - component: {fileID: 3167059706857966732}
   - component: {fileID: 8211889492228328324}
   - component: {fileID: 8534409279665893810}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Amphora_cell.004
   m_TagString: BrokenPiece
   m_Icon: {fileID: 0}
@@ -578,7 +578,7 @@ GameObject:
   - component: {fileID: 7522858810072797590}
   - component: {fileID: 2481598691062247481}
   - component: {fileID: 1482125184764677041}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Amphora_cell_cell_cell.001
   m_TagString: BrokenPiece
   m_Icon: {fileID: 0}
@@ -687,7 +687,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4980278473168868907}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Broken_Amphora
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -730,7 +730,7 @@ GameObject:
   - component: {fileID: 6059525820978202994}
   - component: {fileID: 4468783779492071771}
   - component: {fileID: 4900997854691286241}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Amphora_cell.001_cell
   m_TagString: BrokenPiece
   m_Icon: {fileID: 0}
@@ -843,7 +843,7 @@ GameObject:
   - component: {fileID: 1537101512009021337}
   - component: {fileID: 6226355886852860509}
   - component: {fileID: 2501381591098623112}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Amphora_cell.003
   m_TagString: BrokenPiece
   m_Icon: {fileID: 0}
@@ -956,7 +956,7 @@ GameObject:
   - component: {fileID: 3391453024146079518}
   - component: {fileID: 3936627430158011633}
   - component: {fileID: 6635167710698862129}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Amphora_cell_cell_cell
   m_TagString: BrokenPiece
   m_Icon: {fileID: 0}
