@@ -186,19 +186,23 @@ In addition to the rigid body, we add a mesh collider to ensure, that the vase w
 
 
 ### Technique 3 - Polishing
-Since Polishing a vase would have similar movement to moving a vase, we want to switch between the two, to avoid conflicts when the user is trying to do a specific action. To achieve this, we first created a button, called 'switchPolishingModeButton', a boolean polishingModeOn, and a method that the button would call, which flips the boolean and depending on the current state, changes the icon of the button. 
 
-<img src="https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/gem.png" height="60" />
-<img src="https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/move.png" height="60" />
+To implement the polishing feature, we want to simulate a rubbing gesture on the vase itself. Since polishing a vase would have similar gestures to moving a vase, we want to switch between the two modes, to avoid conflicts when the user is trying to do a specific action. To achieve this, we first need to create a button that allows for the switch between polishing mode and movement mode. Then we need a toggle statement to switch between polishing and movement. First, we started by creating a 'switchPolishingModeButton', which will be used for the toggling:
 
-_The polishing and move icons for the button. Each shows which mode you will switch to_
+<img src="https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/moveOrPolishButton.PNG">
+
+When the polishing button is pressed, we make a call to the method switchPolishingMode(), which changes the state between polishing mode and movement mode. The change of modes does two things: First, it changes the sprite of the moveOrPolishButton to be representative of the mode they can switch back to. If the user switched to polishing mode, move mode will show up, and vice versa. The method call is handled by the following code: 
 
 ```c#
 [SerializeField] private Button switchPolishingModeButton;
 switchPolishingModeButton.onClick.AddListener(switchPolishingMode);
 
+[...]
+
 //Boolean to determine whether polishing mode is on or not
 private bool polishingModeOn;
+
+[...]
 
 public void switchPolishingMode(){
     polishingModeOn = !polishingModeOn;
@@ -213,49 +217,60 @@ public void switchPolishingMode(){
 }
 ```
 
-_The button setup and method to switch the polishingModeOn boolean and the button sprite_
+With this code, we have now toggled the polishing mode, and changed the mode sprite to be representative of the mode that the user can switch back to. Now back in the update function, we can change the dragging implementation: 
 
 ```c#
-if(polishingModeOn){
-    //polishing code
-} else {
-    //move object code
+if(Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved && !isPointerOverUI(Input.GetTouch(0))){
+    if(editableObject.name != "AR Default Plane" && editableObject.name != "Trackables"){
+        [...]
+        if(polishingModeOn){
+            [...] // <--- we are in polishing mode
+        } else {
+            [...]
+        }
+```
+
+Now as for the implementation of the scrubbing itself, we take the vase itself, and iterate over all meshrenders in it and all its child-objects. 
+
+```c#
+shellObject = hit.collider.gameObject;
+[...]
+foreach (MeshRenderer objectRenderer in shellObject.GetComponentsInChildren<MeshRenderer>()) {
+    //[We will get to this part next]
 }
 ```
 
-_If statement to control whether the object is moved or polished_
-
-Shown below: Every time we scrub across the selected object, we iterate over all Meshrenderers for the object and set the Glossiness up by 0.005 points, as long as this is still under 1. If we go above one, the object would become 'too glossy' and eventually become completely white.
+Next, we increase the Glossiness of the artifact's own material by 0.005 points, as long as this is still under 1. If we go above one, the object would become 'too glossy' and eventually become completely white. Next, we also give the object some metallicness in its textures, which allows it to shine. Finally, we also set the smoothness to 1, which removes the sandiness of the gameobject. 
 
 ```c#
-                    foreach (MeshRenderer objectRenderer in shellObject.GetComponentsInChildren<MeshRenderer>()) {
-                       var objectMaterial = objectRenderer.material.GetFloat("_GlossMapScale");
-                        var objectSharedmaterial = objectRenderer.sharedMaterial.GetFloat("_GlossMapScale");
-                        if(objectRenderer.name != "ARPlane" && objectMaterial < 1.0f && objectSharedmaterial < 1.0f){
-                            objectRenderer.material.SetInt("_SmoothnessTextureChannel", 1);
-                            objectRenderer.sharedMaterial.SetInt("_SmoothnessTextureChannel", 1);
+foreach (MeshRenderer objectRenderer in shellObject.GetComponentsInChildren<MeshRenderer>()) {
+    var objectMaterial = objectRenderer.material.GetFloat("_GlossMapScale");
+    var objectSharedmaterial = objectRenderer.sharedMaterial.GetFloat("_GlossMapScale");
+        if(objectRenderer.name != "ARPlane" && objectMaterial < 1.0f && objectSharedmaterial < 1.0f){
+            objectRenderer.material.SetInt("_SmoothnessTextureChannel", 1);
+            objectRenderer.sharedMaterial.SetInt("_SmoothnessTextureChannel", 1);
 
-                            objectRenderer.material.SetFloat("_Metallic", 0.27f);
-                            objectRenderer.sharedMaterial.SetFloat("_Metallic", 0.27f);
+            objectRenderer.material.SetFloat("_Metallic", 0.27f);
+            objectRenderer.sharedMaterial.SetFloat("_Metallic", 0.27f);
 
-                            objectRenderer.material.SetFloat("_GlossMapScale", objectMaterial + 0.005f);
-                            objectRenderer.sharedMaterial.SetFloat("_GlossMapScale", objectSharedmaterial + 0.005f);
+            objectRenderer.material.SetFloat("_GlossMapScale", objectMaterial + 0.005f);
+            objectRenderer.sharedMaterial.SetFloat("_GlossMapScale", objectSharedmaterial + 0.005f);
 
-                        } else {
-                            Debug.Log("Manual log: Error: Tried to change the smoothness of the plane.");
-                        }
-                    }
+            } else {
+                Debug.Log("Manual log: Error: Tried to change the smoothness of the plane.");
+            }
+        }
 ```
+
+With this code implemented, as long as the user rubs over the artifact, it will increase in shininess, thus giving the feeling of being polished. To see this in action, please see the GIF below:
 
 <img src="https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/technique_3.gif" height="420" />
 
-_A short gif presenting the function. We place two vases, then press the button to switch to polishing mode, and polish the left vase.
+_A short gif presenting the function. We place two vases, then press the button to switch to polishing mode, and polish the left vase._
 
 ## Additional notes.
 - Fixed a bug, where the editing options would toggle when pressing the AR Cursor. Object editing will no longer be enabled when pressing the cursor. 
+- GitLab has been causing a lot of issues for us with rejecting commits due to connection errors. It has been very hard to work and collaborate because of this. 
 
 ## Conclusion
-[TODO: conclusions of this weeks exercises]
-
-## References
-[TODO: used references]
+We have now successfully expanded our application by adding three interaction techniques: users can now generate themes for a given room using theme plates to change the material and thereby theme of surrounding artifacts. This leverages markers and changing the appearance of the object. Users are now also able to destroy artifacts by walking into them. This leverages proximity and animations. Lastly, users can also polish their artifacts using rubbing gestures, to change the appearance of the artifacts.
