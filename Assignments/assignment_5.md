@@ -5,8 +5,11 @@
 **Group members participating**: Oliver Benée Petersen, Thorben Christopher Schmidt
 
 **Activity duration**: [TODO: Insert hours spend]
+
 Friday 04.03.2022: 6 hours
+
 saturday 05.03.2022: 12 hours
+
 Sunday 06.03.2022: 
 
 
