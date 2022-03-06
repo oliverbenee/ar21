@@ -50,16 +50,14 @@ To achieve this, we first needed a new model, since breaking apart an object in 
 
 We then importet this into unity and set it up as a prefab, where we could adress and edit each shard as their own prefab.
 
-We create variables 
-
-<img src="https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/technique_2.gif" height="420" />
-
+We create variables for our broken vase prefab and a new invisible plane that the vase can fall apart onto.
 
 ```c#
 //broken vase prefab
     public GameObject brokenVase;
     public GameObject shatterPhysicsPlane;
 ```
+Then, using raycast to cast a ray from the middle of the screen, and a check on the distance of the objects hit by the ray. We then check if that object is not null, not an AR default plane, and not a trackable either. This ensures that this code is only run when we actually 'bump' the phone into the vase. Once the phone is close enough to the vase, we spawn the broken vase prefab, and the invisible plane under it, and then destroy the original vase GameObject.
 
 ```c#
 //Checking whether the camera is colliding with something
@@ -81,7 +79,9 @@ We create variables
         }
 ```
 
+The broken vase and plane both have rigid bodies and mesh colliders. The plane is fixed in place. This then leads to the result below.
 
+<img src="https://gitlab.au.dk/au598997/ar21/-/raw/main/Images/technique_2.gif" height="420" />
 
 
 
