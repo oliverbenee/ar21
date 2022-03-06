@@ -1,4 +1,4 @@
-# Assignment 5 - ?? (graded)
+# Assignment 5 - Interaction techniques (graded)
 
 **Date**: 06.03.2022
 
@@ -20,27 +20,29 @@ We intend to implement the following three interaction techniques:
 
 For our first interaction technique, we intend to let the user to create general themes in their rooms using marker interaction. We want to let the user print out XR markers representative of a desired theme, and have the user tie placed artifacts to the marker. Any artifact, that is moved to this marker should change to the same material as that of the marker. Thus, the new object will fit the theme, that the user has decided for the area of the marker.  
 
+We argue, that this approach fulfills the criteria of using tracked image marker interaction for the detection of the theme plates, and changing the appearance of an object by changing the surface material of the artifact. 
 
-[TODO: description]
-
-### Technique 2 - Watch your step [Proximity, animate]
+### Technique 2 - Watch your step [Relation, Animation]
 
 For the second interaction, we want to solidify the value and fragility, that is inherent to ancient artifacts by implementing a system, that breaks the placed artifacts when a user walks into them. We intend to implement this by measuring the relation in the form of the distance between the user and an artifact, and if the two are too close, the vase will break apart. 
+
+We argue, that this approach fulfills the criteria of using the relation between the user, and the placed artifact, as the artifact can only be destroyed, when the two are close. For the breakage, we argue that the use of rigidbodies to make the object fall apart fulfills the critera of animating a gameobject in response to user interaction.
 
 ### Technique 3 - Polishing [Gesture, Appearance]
 
 The third technique, we intend to implement the ability for users to polish placed artifacts by scrubbing a selected object with their finger. The scrubbing of the artifact is intended to simulate rubbing the artifact with a piece of cloth or other polishing device. This way, the user will be able to gesture at a selected object to polish it.
 
+We argue, that the use of dragging back and forth acts as a gesture simulating rubbing on the artifact. By polishing the artifact, we want to make it shiny and prettier, thus improving the appearance of the object. 
+
 ## Plan
-[TODO: plan of this weeks exercises]
+
+For the implementation of the three interaction techniques, we will both be working to implement the polishing technique. Afterwards, Oliver will be focusing on the implementation of the theme plates for marker interaction, as well as writing the report, while Thorben will focus on implementing the artifact breakage of technique 2.
 
 ## Results
-[TODO: results for this weeks exercises]
 
+For each of the techniques, we will now discuss their intended functionality further, a plan of implementation, as well as the coding of this feature in unity. 
 
-
-### Technique 1 - [TODO: Name]
- 
+### Technique 1 - Theme plates.  
  
 To implement the feeling of a marker being representative of a room, we are going to implement a marker interaction, where users can place the marker in the middle of the room, and have nearby artifacts be rendered as a color nearby. However, since rendering entire rooms is going to be performance intensive, we are going to let theme markers create a field around them, where all objects inside will change to the theme on the plate. This way, we don't have to generate a model of the room in the program, which would be performance intensive not only to save, but also to maintain. 
 
